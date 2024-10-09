@@ -1,0 +1,20 @@
+# Eclipse specific files
+/.settings/
+/.project
+/.classpath
+
+# Maven specific files
+/target/
+
+# Eclipse Core
+/.metadata
+/*.log
+/RemoteSystemsTempFiles/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Maven wrapper files
+.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
