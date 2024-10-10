@@ -1,0 +1,34 @@
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+    version="2.1">
+    <persistence-unit name="miPostgresDatabase">
+        <!-- Clases de entidad -->
+        <!-- <class>model.Client</class>
+        <class>model.Food</class>
+        <class>model.Menu</class>
+        <class>model.Order</class>
+        <class>model.ShoppingCart</class>
+        <class>model.Suggestion</class> -->
+        <class>model.User</class>
+
+        <!-- Configuración de conexión a PostgreSQL -->
+        <properties>
+            <property name="jakarta.persistence.jdbc.url"
+                value="jdbc:postgresql://localhost:5432/ttps" />
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver" />
+            <property name="jakarta.persistence.jdbc.user" value="root" />
+            <property name="jakarta.persistence.jdbc.password" value="password" />
+
+            <!-- Dialecto de Hibernate para PostgreSQL -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+
+            <!-- Otras configuraciones de Hibernate -->
+            <property name="hibernate.hbm2ddl.auto" value="create" /> <!-- Puedes usar 'create' o
+            'update' según tu necesidad -->
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
+        </properties>
+    </persistence-unit>
+
+</persistence>
