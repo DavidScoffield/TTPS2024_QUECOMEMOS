@@ -18,12 +18,9 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
 
   @Override
   public boolean exist(Long id) {
-    EntityManager em = HibernateUtil.getEntityManager();
-    try {
+    try (EntityManager em = HibernateUtil.getEntityManager()) {
       T entity = em.find(persistentClass, id);
       return entity != null;
-    } finally {
-      em.close();
     }
   }
 
@@ -105,34 +102,25 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
 
   @Override
   public T get(Serializable id) {
-    EntityManager em = HibernateUtil.getEntityManager();
-    try {
+    try (EntityManager em = HibernateUtil.getEntityManager()) {
       return em.find(persistentClass, id);
-    } finally {
-      em.close();
     }
   }
 
   @Override
   public List<T> getAll(String column) {
-    EntityManager em = HibernateUtil.getEntityManager();
-    try {
-      return em.createQuery(
-          "SELECT e FROM " + persistentClass.getSimpleName() + " e ORDER BY e." + column,
-          persistentClass).getResultList();
-    } finally {
-      em.close();
+    try (EntityManager em = HibernateUtil.getEntityManager()) {
+      return em.createQuery("SELECT e FROM " + persistentClass.getSimpleName()
+          + " e ORDER BY e." + column, persistentClass).getResultList();
     }
   }
 
   @Override
   public List<T> getAll() {
-    EntityManager em = HibernateUtil.getEntityManager();
-    try {
-      return em.createQuery("SELECT e FROM " + persistentClass.getSimpleName() + " e",
+    try (EntityManager em = HibernateUtil.getEntityManager()) {
+      return em.createQuery(
+          "SELECT e FROM " + persistentClass.getSimpleName() + " e",
           persistentClass).getResultList();
-    } finally {
-      em.close();
     }
   }
 }
