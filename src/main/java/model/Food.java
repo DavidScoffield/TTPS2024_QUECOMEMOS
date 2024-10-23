@@ -6,7 +6,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "foods")
 public class Food {
@@ -21,45 +27,9 @@ public class Food {
 
   private String type;
 
-  public Food() {
-  }
-
   public Food(String name, Boolean isVegetarian, String type) {
     this.name = name;
     this.isVegetarian = isVegetarian;
     this.type = type;
   }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Boolean getIsVegetarian() {
-    return isVegetarian;
-  }
-
-  public void setIsVegetarian(Boolean isVegetarian) {
-    this.isVegetarian = isVegetarian;
-  }
-
-  public String getType() {
-    return type;
-  }
-
-  public void setType(String type) {
-    this.type = type;
-  }
-
 }

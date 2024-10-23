@@ -11,7 +11,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "menus")
 public class Menu {
@@ -31,52 +37,9 @@ public class Menu {
   @JoinTable(name = "menu_food", joinColumns = @JoinColumn(name = "menu_id"), inverseJoinColumns = @JoinColumn(name = "food_id"))
   private List<Food> foods;
 
-  public Menu() {
-  }
-
   public Menu(String name, String picture, Float price) {
     this.name = name;
     this.picture = picture;
-    this.price = price;
-  }
-
-  public List<Food> getFoods() {
-    return foods;
-  }
-
-  public void setFoods(List<Food> foods) {
-    this.foods = foods;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getPicture() {
-    return picture;
-  }
-
-  public void setPicture(String picture) {
-    this.picture = picture;
-  }
-
-  public Float getPrice() {
-    return price;
-  }
-
-  public void setPrice(Float price) {
     this.price = price;
   }
 

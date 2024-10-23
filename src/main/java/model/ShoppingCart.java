@@ -12,7 +12,13 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "shopping_carts")
 public class ShoppingCart {
@@ -29,33 +35,6 @@ public class ShoppingCart {
   private Client client;
 
   public ShoppingCart(Client client) {
-    this.client = client;
-  }
-
-  public ShoppingCart() {
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public List<Menu> getMenus() {
-    return menus;
-  }
-
-  public void setMenus(List<Menu> menus) {
-    this.menus = menus;
-  }
-
-  public Client getClient() {
-    return client;
-  }
-
-  public void setClient(Client client) {
     this.client = client;
   }
 

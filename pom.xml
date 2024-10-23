@@ -18,6 +18,13 @@
   </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.34</version>
+    </dependency>
+
     <!-- JPA and Hibernate -->
     <dependency>
       <groupId>org.hibernate.orm</groupId>
