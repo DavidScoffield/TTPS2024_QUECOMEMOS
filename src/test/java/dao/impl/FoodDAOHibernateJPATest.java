@@ -40,7 +40,7 @@ class FoodDAOHibernateJPATest {
 
   @AfterEach
   void tearDown() {
-    // Limpiar los datos despuÃ©s de cada prueba
+    // Limpiar los datos después de cada prueba
     EntityTransaction tx = em.getTransaction();
     tx.begin();
     em.createQuery("DELETE FROM Food").executeUpdate(); // Elimina todos los alimentos
