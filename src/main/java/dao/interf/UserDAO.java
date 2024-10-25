@@ -4,13 +4,7 @@ import java.util.List;
 
 import model.User;
 
-public interface UserDAO extends GenericDAO<User> {
-  public User getByEmail(String email);
-
+public interface UserDAO extends GenericDAO<User>, UserGenericDAO {
   public List<User> getByRole(String role);
-
-  public User getByDNI(String dni);
-
-  public User getByEmailAndPassword(String email, String password);
 
 }
