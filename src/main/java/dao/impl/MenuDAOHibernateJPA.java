@@ -30,4 +30,18 @@ public class MenuDAOHibernateJPA extends GenericDAOHibernateJPA<Menu>
     }
   }
 
+  @Override
+  public List<Menu> getVegetarians(Boolean isVegetarian) {
+    try (EntityManager em = HibernateUtil.getEntityManager()) {
+      String queryString = isVegetarian
+          ? "SELECT m FROM Menu m WHERE NOT EXISTS (SELECT f FROM m.foods f WHERE f.isVegetarian = false)"
+          : "SELECT m FROM Menu m WHERE EXISTS (SELECT f FROM m.foods f WHERE f.isVegetarian = false)";
+      TypedQuery<Menu> query = em.createQuery(queryString, Menu.class);
+      return query.getResultList();
+    } catch (Exception e) {
+      return null;
+    }
+
+  }
+
 }
