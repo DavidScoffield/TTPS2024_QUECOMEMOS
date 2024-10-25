@@ -20,7 +20,7 @@
 Para levantar la base de datos, se puede utilizar docker-compose, ejecutando el siguiente comando en la raiz del proyecto:
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
 > Esto levantara una base de datos postgres en el puerto `5432`, con el usuario `root` y contraseña `password`. Estos datos se pueden modificar en el archivo `docker-compose.yml`.
