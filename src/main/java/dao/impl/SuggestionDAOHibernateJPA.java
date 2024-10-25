@@ -28,35 +28,6 @@ public class SuggestionDAOHibernateJPA
     }
   }
 
-  // @Override
-  // public List<Suggestion> getByClient(Long clientId) {
-
-  // try (EntityManager em = HibernateUtil.getEntityManager()) {
-  // TypedQuery<Suggestion> query = em.createQuery(
-  // "SELECT s FROM Suggestion s WHERE s.client.id = :client_id",
-  // Suggestion.class);
-  // query.setParameter("client_id", clientId);
-  // return query.getResultList();
-  // } catch (Exception e) {
-  // return null;
-  // }
-  // }
-
-  // @Override
-  // public List<Suggestion> getByClientAndType(Long clientId, String type) {
-  // try (EntityManager em = HibernateUtil.getEntityManager()) {
-  // TypedQuery<Suggestion> query = em.createQuery(
-  // "SELECT s FROM Suggestion s WHERE s.client.id = :client_id AND s.suggestiontype =
-  // :suggestiontype",
-  // Suggestion.class);
-  // query.setParameter("client_id", clientId);
-  // query.setParameter("suggestiontype", type);
-  // return query.getResultList();
-  // } catch (Exception e) {
-  // return null;
-  // }
-  // }
-
   @Override
   public List<Suggestion> getLikeMessage(String message) {
     try (EntityManager em = HibernateUtil.getEntityManager()) {

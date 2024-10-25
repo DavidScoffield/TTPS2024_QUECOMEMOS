@@ -19,13 +19,11 @@ class SuggestionDAOHibernateJPATest {
 
   private EntityManager em;
   private SuggestionDAOHibernateJPA suggestionDAO;
-  private ClientDAOHibernateJPA clientDAO;
 
   @BeforeEach
   void setUp() {
     em = HibernateUtil.getEntityManager();
     suggestionDAO = new SuggestionDAOHibernateJPA();
-    clientDAO = new ClientDAOHibernateJPA();
 
     EntityTransaction tx = em.getTransaction();
     tx.begin();
@@ -74,25 +72,6 @@ class SuggestionDAOHibernateJPATest {
     assertEquals("Food", suggestions.get(0).getSuggestionType());
     assertEquals("Food", suggestions.get(1).getSuggestionType());
   }
-
-  // @Test
-  // void testGetByClient() {
-  // Client client = clientDAO.
-
-  // List<Suggestion> suggestions = suggestionDAO.getByClient(1L); // Assuming Client1 ID is
-  // 1
-  // assertNotNull(suggestions);
-  // assertEquals(2, suggestions.size()); // Client1 has two suggestions
-  // assertEquals(1L, suggestions.get(0).getClient().getId());
-  // }
-
-  // @Test
-  // void testGetByClientAndType() {
-  // List<Suggestion> suggestions = suggestionDAO.getByClientAndType(1L, "Food");
-  // assertNotNull(suggestions);
-  // assertEquals(2, suggestions.size()); // Client1 has two "Food" suggestions
-  // assertEquals("Food", suggestions.get(0).getSuggestionType());
-  // }
 
   @Test
   void testGetLikeMessage() {
