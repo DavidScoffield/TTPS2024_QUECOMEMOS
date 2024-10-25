@@ -11,4 +11,6 @@ public interface UserDAO extends GenericDAO<User> {
 
   public User getByDNI(String dni);
 
+  public User getByEmailAndPassword(String email, String password);
+
 }

@@ -52,4 +52,19 @@ public class UserDAOHibernateJPA extends GenericDAOHibernateJPA<User>
       return null;
     }
   }
+
+  @Override
+  public User getByEmailAndPassword(String email, String password) {
+    try (EntityManager em = HibernateUtil.getEntityManager()) {
+      TypedQuery<User> query = em.createQuery(
+          "SELECT u FROM User u WHERE u.email = :email AND u.password = :password",
+          User.class);
+      query.setParameter("email", email);
+      query.setParameter("password", password);
+      List<User> result = query.getResultList();
+      return result.isEmpty() ? null : result.get(0);
+    } catch (Exception e) {
+      return null;
+    }
+  }
 }

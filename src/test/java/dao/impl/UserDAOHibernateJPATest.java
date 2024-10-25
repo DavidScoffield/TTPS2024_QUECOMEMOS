@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,11 +21,9 @@ class UserDAOHibernateJPATest {
 
   @BeforeEach
   void setUp() {
-    // Inicializar el EntityManager y el DAO antes de cada prueba
     em = HibernateUtil.getEntityManager();
     userDAO = new UserDAOHibernateJPA();
 
-    // Crear usuarios de prueba en la base de datos H2
     EntityTransaction tx = em.getTransaction();
     tx.begin();
 
@@ -69,4 +68,15 @@ class UserDAOHibernateJPATest {
     assertNotNull(user);
     assertEquals("123456", user.getDni());
   }
+
+  @Test
+  void testGetByEmailAndPassword() {
+    User user = userDAO.getByEmailAndPassword("user1@gmail.com", "password1");
+    assertNotNull(user);
+    assertEquals("user1@gmail.com", user.getEmail());
+
+    user = userDAO.getByEmailAndPassword("user2@gmail.com", "nonExist");
+    assertNull(user);
+  }
+
 }
