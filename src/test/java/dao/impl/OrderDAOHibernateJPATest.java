@@ -60,10 +60,9 @@ class OrderDAOHibernateJPATest {
 
   @AfterEach
   void tearDown() {
-    // Limpiar los datos despu?s de cada prueba
     EntityTransaction tx = em.getTransaction();
     tx.begin();
-    em.createQuery("DELETE FROM Order").executeUpdate(); // Elimina todas las ?rdenes
+    em.createQuery("DELETE FROM Order").executeUpdate();
     tx.commit();
     em.close();
   }
@@ -78,11 +77,11 @@ class OrderDAOHibernateJPATest {
 
   @Test
   void testGetByEmissionDate_NotFound() {
-    LocalDate nonExistentDate = LocalDate.of(3000, 1, 1); // Fecha futura
+    LocalDate nonExistentDate = LocalDate.of(3000, 1, 1);
     List<Order> orders = orderDAO
         .getByEmissionDate(convertToDate(nonExistentDate));
     assertNotNull(orders);
-    assertEquals(0, orders.size()); // Debe ser una lista vac?a
+    assertEquals(0, orders.size());
   }
 
   // @Test
@@ -132,7 +131,7 @@ class OrderDAOHibernateJPATest {
 
     List<Order> orders = orderDAO.getBetweenDeliveryDates(
         convertToDate(startDate), convertToDate(endDate));
-    assertEquals(2, orders.size()); // order1 y order3 deber?an estar en el rango
+    assertEquals(2, orders.size()); // order1 y order3 deberían estar en el rango
   }
 
   // Método auxiliar para convertir LocalDate a Date
