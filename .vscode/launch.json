@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-QuecomemosApplication<TTPS2024_QUECOMEMOS>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.ttps.quecomemos.QuecomemosApplication",
+      "projectName": "TTPS2024_QUECOMEMOS",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
