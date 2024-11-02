@@ -5,5 +5,6 @@
     "editor.tabSize": 2,
     "editor.detectIndentation": false
   },
-  "java.debug.settings.onBuildFailureProceed": true
+  "java.debug.settings.onBuildFailureProceed": true,
+  "java.compile.nullAnalysis.mode": "automatic"
 }
