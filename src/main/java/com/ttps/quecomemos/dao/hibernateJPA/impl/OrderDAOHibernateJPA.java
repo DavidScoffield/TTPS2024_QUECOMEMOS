@@ -1,9 +1,9 @@
-package com.ttps.quecomemos.dao.impl.hibernateJPA;
+package com.ttps.quecomemos.dao.hibernateJPA.impl;
 
 import java.util.Date;
 import java.util.List;
 
-import com.ttps.quecomemos.dao.interf.OrderDAO;
+import com.ttps.quecomemos.dao.hibernateJPA.interf.OrderDAO;
 import com.ttps.quecomemos.model.Order;
 import com.ttps.quecomemos.util.HibernateUtil;
 

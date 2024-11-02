@@ -1,4 +1,4 @@
-package com.ttps.quecomemos.dao.interf;
+package com.ttps.quecomemos.dao.hibernateJPA.interf;
 
 import java.util.List;
 

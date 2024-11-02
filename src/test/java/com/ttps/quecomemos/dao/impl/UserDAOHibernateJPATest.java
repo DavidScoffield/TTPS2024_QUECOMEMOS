@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.ttps.quecomemos.dao.impl.hibernateJPA.UserDAOHibernateJPA;
+import com.ttps.quecomemos.dao.hibernateJPA.impl.UserDAOHibernateJPA;
 import com.ttps.quecomemos.model.User;
 import com.ttps.quecomemos.util.HibernateUtil;
 

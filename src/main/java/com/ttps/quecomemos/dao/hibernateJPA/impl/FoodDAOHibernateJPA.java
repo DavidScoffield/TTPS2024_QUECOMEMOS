@@ -1,8 +1,8 @@
-package com.ttps.quecomemos.dao.impl.hibernateJPA;
+package com.ttps.quecomemos.dao.hibernateJPA.impl;
 
 import java.util.List;
 
-import com.ttps.quecomemos.dao.interf.FoodDAO;
+import com.ttps.quecomemos.dao.hibernateJPA.interf.FoodDAO;
 import com.ttps.quecomemos.model.Food;
 import com.ttps.quecomemos.util.HibernateUtil;
 
