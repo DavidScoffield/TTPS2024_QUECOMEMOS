@@ -9,13 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import com.ttps.quecomemos.model.Food;
 import com.ttps.quecomemos.repository.FoodRepository;
 
 @SpringBootTest
-@ActiveProfiles("test") // Usar el perfil de prueba
+// @ActiveProfiles("test") // Usar el perfil de prueba
 public class FoodServiceTest {
 
   @Autowired

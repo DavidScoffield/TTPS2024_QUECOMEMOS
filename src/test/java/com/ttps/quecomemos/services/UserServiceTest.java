@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import com.ttps.quecomemos.model.Client;
 import com.ttps.quecomemos.model.User;
@@ -16,7 +15,7 @@ import com.ttps.quecomemos.repository.ClientRepository;
 import com.ttps.quecomemos.repository.UserRepository;
 
 @SpringBootTest
-@ActiveProfiles("test") // Use the test profile
+// @ActiveProfiles("test") // Use the test profile
 public class UserServiceTest {
 
   @Autowired
