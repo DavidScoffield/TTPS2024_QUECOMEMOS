@@ -24,7 +24,7 @@ public class SuggestionService {
   }
 
   public List<Suggestion> getSuggestionsByType(String type) {
-    return suggestionRepository.findByType(type);
+    return suggestionRepository.findBySuggestionType(type);
   }
 
   public List<Suggestion> getSuggestionsLikeMessage(String message) {
