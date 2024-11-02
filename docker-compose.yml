@@ -19,13 +19,13 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: ttps
 
-  postgres_test:
-    image: postgres
-    ports:
-      - 5433:5432
-    restart: always
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: password
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: ttps_test
+  # postgres_test:
+  #   image: postgres
+  #   ports:
+  #     - 5433:5432
+  #   restart: always
+  #   environment:
+  #     POSTGRES_HOST_AUTH_METHOD: password
+  #     POSTGRES_USER: root
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: ttps_test
