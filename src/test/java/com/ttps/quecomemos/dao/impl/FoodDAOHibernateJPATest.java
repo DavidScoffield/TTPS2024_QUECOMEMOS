@@ -8,30 +8,28 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 
-import com.ttps.quecomemos.dao.impl.hibernateJPA.FoodDAOHibernateJPA;
+import com.ttps.quecomemos.dao.hibernateJPA.impl.FoodDAOHibernateJPA;
 import com.ttps.quecomemos.model.Food;
+import com.ttps.quecomemos.util.HibernateUtil;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 
-@SpringBootTest
-@DataJpaTest
 class FoodDAOHibernateJPATest {
 
-  @Autowired
-  private EntityManager em; // Inyección del EntityManager
-
+  private EntityManager em;
   private FoodDAOHibernateJPA foodDAO;
 
   @BeforeEach
   void setUp() {
+
+    em = HibernateUtil.getEntityManager();
     foodDAO = new FoodDAOHibernateJPA();
 
-    // Inicializa la base de datos
+    EntityTransaction tx = em.getTransaction();
+    tx.begin();
+
     Food food1 = new Food("Pizza", false, "Fast Food");
     Food food2 = new Food("Salad", false, "Vegetable");
     Food food3 = new Food("Vegan potato omelette", true, "Vegetable");
@@ -39,12 +37,18 @@ class FoodDAOHibernateJPATest {
     em.persist(food1);
     em.persist(food2);
     em.persist(food3);
+
+    tx.commit();
   }
 
   @AfterEach
-  @Rollback // Revierte cambios después de cada prueba
   void tearDown() {
+    // Limpiar los datos después de cada prueba
+    EntityTransaction tx = em.getTransaction();
+    tx.begin();
     em.createQuery("DELETE FROM Food").executeUpdate(); // Elimina todos los alimentos
+    tx.commit();
+    em.close();
   }
 
   @Test
