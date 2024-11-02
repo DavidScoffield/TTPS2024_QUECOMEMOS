@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.ttps.quecomemos.dao.impl.hibernateJPA.OrderDAOHibernateJPA;
 import com.ttps.quecomemos.model.Order;
 import com.ttps.quecomemos.util.HibernateUtil;
 

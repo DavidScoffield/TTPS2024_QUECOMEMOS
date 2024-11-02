@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.ttps.quecomemos.dao.impl.hibernateJPA.SuggestionDAOHibernateJPA;
 import com.ttps.quecomemos.model.Client;
 import com.ttps.quecomemos.model.Suggestion;
 import com.ttps.quecomemos.util.HibernateUtil;

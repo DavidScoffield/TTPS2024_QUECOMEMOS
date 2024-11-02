@@ -1,4 +1,4 @@
-package com.ttps.quecomemos.dao.impl;
+package com.ttps.quecomemos.dao.impl.hibernateJPA;
 
 import java.io.Serializable;
 import java.util.List;
