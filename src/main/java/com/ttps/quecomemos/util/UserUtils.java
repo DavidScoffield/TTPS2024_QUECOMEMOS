@@ -1,6 +1,7 @@
 package com.ttps.quecomemos.util;
 
 import com.ttps.quecomemos.dto.LoginUserDTO;
+import com.ttps.quecomemos.dto.UpdateClientDTO;
 import com.ttps.quecomemos.dto.UserRegisterDTO;
 import com.ttps.quecomemos.errors.ValidationDataException;
 
@@ -47,6 +48,19 @@ public class UserUtils {
     }
 
     return true;
+  }
+
+  public static boolean isUpdateDataComplete(UpdateClientDTO updateUserDTO) {
+
+    if (updateUserDTO.getActualPassword() != null) {
+      if (updateUserDTO.getNewPassword() == null) {
+        throw new ValidationDataException("newPassword",
+            "If want to change password, `newPassword` and `actualPassword` is required");
+      }
+    }
+
+    return true;
+
   }
 
 }

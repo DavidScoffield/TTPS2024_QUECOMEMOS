@@ -1,23 +1,23 @@
 package com.ttps.quecomemos.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.ttps.quecomemos.dto.LoginUserDTO;
+import com.ttps.quecomemos.dto.UpdateClientDTO;
 import com.ttps.quecomemos.dto.UserRegisterDTO;
-import com.ttps.quecomemos.enums.UserRole;
-import com.ttps.quecomemos.errors.ValidationDataException;
+import com.ttps.quecomemos.handlers.GenericExceptionHandler;
 import com.ttps.quecomemos.model.Client;
-import com.ttps.quecomemos.model.ShoppingCart;
 import com.ttps.quecomemos.model.User;
 import com.ttps.quecomemos.services.UserService;
 import com.ttps.quecomemos.util.ApiResponseDTO;
@@ -38,6 +38,9 @@ public class UserController {
 
   @Autowired
   private UserService userService;
+
+  @Autowired
+  private GenericExceptionHandler exceptionHandler;
 
   /**
    * Handles the registration of a new user.
@@ -60,73 +63,28 @@ public class UserController {
   UserRegisterDTO userRegisterDTO) {
     log.info("Registering user: {}", userRegisterDTO);
 
-    try {
-      // Validate data
-      UserUtils.isRegistrationDataComplete(userRegisterDTO);
+    // Validate data
+    UserUtils.isRegistrationDataComplete(userRegisterDTO);
 
-      if (!userRegisterDTO.getPassword().equals(userRegisterDTO.getRepeatPassword())) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-            "Passwords do not match");
-      }
-
-      // Check if user already exists
-      User existingUser = userService.findUserByDNI(userRegisterDTO.getDni());
-
-      if (existingUser != null) {
-        throw new ResponseStatusException(HttpStatus.CONFLICT,
-            String.format("User with `dni` %s already exists", userRegisterDTO.getDni()));
-      }
-
-      // Register new user
-      User newUser;
-
-      if (userRegisterDTO.getRoleSelected() == UserRole.CLIENT) {
-        // Create client and associated shopping cart
-        Client newClient = new Client(userRegisterDTO.getDni(), userRegisterDTO.getName(),
-            userRegisterDTO.getEmail(), userRegisterDTO.getPassword(),
-            userRegisterDTO.getRoleSelected().toString());
-
-        ShoppingCart newCart = new ShoppingCart(newClient);
-        newClient.setCart(newCart);
-
-        newUser = userService.registerClient(newClient);
-        log.info("Client registered successfully: {}", (Client) newUser);
-
-      } else {
-        // Create regular user
-        newUser = new User(userRegisterDTO.getDni(), userRegisterDTO.getName(),
-            userRegisterDTO.getEmail(), userRegisterDTO.getPassword(),
-            userRegisterDTO.getRoleSelected().toString());
-
-        newUser = userService.registerUser(newUser);
-        log.info("User registered successfully: {}", newUser);
-      }
-
-      ApiResponseDTO<User> response = new ApiResponseDTO<>(newUser,
-          "User registered successfully", HttpStatus.CREATED);
-      return new ResponseEntity<>(response, HttpStatus.CREATED);
-
-    } catch (ValidationDataException e) {
-      log.error("Validation error: {}", e.getMessage());
-      return handleValidationException(e);
-    } catch (ResponseStatusException e) {
-      log.error("Status error: {}", e.getMessage());
-      ApiResponseDTO<User> response = new ApiResponseDTO<>(null, e.getReason(),
-          HttpStatus.valueOf(e.getStatusCode().value()));
-      return new ResponseEntity<>(response, e.getStatusCode());
-    } catch (DataIntegrityViolationException e) {
-      log.error("Data integrity violation: {}", e.getMessage());
-      ApiResponseDTO<User> response = new ApiResponseDTO<>(null, "User already exists",
-          HttpStatus.CONFLICT);
-      return new ResponseEntity<>(response, HttpStatus.CONFLICT);
-    } catch (Exception e) {
-      log.error("Unexpected error registering user", e);
-      ApiResponseDTO<User> response = new ApiResponseDTO<>(null,
-          "Unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-      return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    if (!userRegisterDTO.getPassword().equals(userRegisterDTO.getRepeatPassword())) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
     }
+
+    User newUser = userService.registerNewUser(userRegisterDTO);
+    ApiResponseDTO<User> response = new ApiResponseDTO<>(newUser,
+        "User registered successfully", HttpStatus.CREATED);
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
+
   }
 
+  /**
+   * Logs in an existing user.
+   *
+   * @param loginUserDTO The user object to be logged in.
+   * @return A ResponseEntity containing the logged in user and an HTTP status code. - If
+   *         the login is successful, returns the logged in user and HTTP status 200 (OK).
+   * 
+   */
   @PostMapping("/login")
   @Operation(summary = "Login user", description = "Logs in an existing user")
   @ApiResponses({
@@ -139,69 +97,57 @@ public class UserController {
   LoginUserDTO loginUserDTO) {
     log.info("Logging in user: {}", loginUserDTO);
 
-    try {
-      // Validate data
-      UserUtils.isLoginDataComplete(loginUserDTO);
+    // Validate data
+    UserUtils.isLoginDataComplete(loginUserDTO);
 
-      // Check if user exists
-      User existingUser = userService.findUserByDNI(loginUserDTO.getDni());
+    User loggedUser = userService.authenticateUser(loginUserDTO);
 
-      if (existingUser == null) {
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-            String.format("Invalid credentials", loginUserDTO.getDni()));
-      }
-
-      // Check if password is correct
-      if (!existingUser.getPassword().equals(loginUserDTO.getPassword())) {
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
-      }
-
-      ApiResponseDTO<User> response = new ApiResponseDTO<>(existingUser,
-          "User logged in successfully", HttpStatus.OK);
-      return new ResponseEntity<>(response, HttpStatus.OK);
-
-    } catch (ValidationDataException e) {
-      log.error("Validation error: {}", e.getMessage());
-      return handleValidationException(e);
-    } catch (ResponseStatusException e) {
-      log.error("Status error: {}", e.getMessage());
-      ApiResponseDTO<User> response = new ApiResponseDTO<>(null, e.getReason(),
-          HttpStatus.valueOf(e.getStatusCode().value()));
-      return new ResponseEntity<>(response, e.getStatusCode());
-    } catch (Exception e) {
-      log.error("Unexpected error logging in user", e);
-      ApiResponseDTO<User> response = new ApiResponseDTO<>(null,
-          "Unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-      return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    ApiResponseDTO<User> response = new ApiResponseDTO<>(loggedUser,
+        "User logged in successfully", HttpStatus.OK);
+    return new ResponseEntity<>(response, HttpStatus.OK);
 
   }
 
-  // Errors handlers
-  @ExceptionHandler(ValidationDataException.class)
-  private ResponseEntity<ApiResponseDTO<User>> handleValidationException(
-      ValidationDataException e) {
-    ApiResponseDTO<User> response = new ApiResponseDTO<>(null, e.getMessage(),
-        HttpStatus.BAD_REQUEST);
-    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+  /**
+   * Updates an existing client.
+   * 
+   * @param dni             The DNI of the client to be updated.
+   * @param updateClientDTO The updated client object.
+   * @return A ResponseEntity containing the updated client and an HTTP status code.
+   */
+
+  @PutMapping("/update/{dni}")
+  @Operation(summary = "Update Client", description = "Updates an existing client. Requires DNI of the client to be updated and the updated client object. You can update the name, email, password, and photo of the client. All fields are optional.")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "User updated successfully"),
+      @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
+      @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content),
+      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
+  })
+  public ResponseEntity<ApiResponseDTO<Client>> updateClient(@PathVariable
+  String dni, @RequestBody
+  UpdateClientDTO updateClientDTO) {
+    log.info("Updating client: {}", updateClientDTO, " with DNI: {}", dni);
+
+    // Validate data
+    UserUtils.isUpdateDataComplete(updateClientDTO);
+
+    // Update user
+    Client updatedUser = userService.updateClient(dni, updateClientDTO);
+
+    ApiResponseDTO<Client> response = new ApiResponseDTO<>(updatedUser,
+        "Client updated successfully", HttpStatus.OK);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<ApiResponseDTO<Void>> handleHttpMessageNotReadable(
       HttpMessageNotReadableException e) {
-    String errorMessage = "Invalid input for `roleSelected`. Accepted values are: SHIFT_MANAGER, CLIENT, ADMIN.";
-    log.error("Invalid UserRole provided: {}", e.getMessage());
-    ApiResponseDTO<Void> response = new ApiResponseDTO<>(null, errorMessage,
+    log.error("Invalid Data Input provided: {}", e.getMessage());
+    ApiResponseDTO<Void> response = new ApiResponseDTO<>(null, e.getMessage(),
         HttpStatus.BAD_REQUEST);
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-  }
-
-  @ExceptionHandler(Exception.class)
-  public ResponseEntity<ApiResponseDTO<Void>> handleGenericException(Exception e) {
-    log.error("Unexpected error: {}", e.getMessage());
-    ApiResponseDTO<Void> response = new ApiResponseDTO<>(null,
-        "Unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }
