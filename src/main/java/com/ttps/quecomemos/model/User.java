@@ -33,13 +33,17 @@ public class User {
 
   private String role;
 
-  public User(String dni, String name, String email, String password,
-      String role) {
+  public User(String dni, String name, String email, String password, String role) {
     this.dni = dni;
     this.password = password;
     this.name = name;
     this.email = email;
     this.role = role;
+  }
+
+  @Override
+  public String toString() {
+    return "User{name='" + name + "', dni='" + dni + "'}";
   }
 
 }

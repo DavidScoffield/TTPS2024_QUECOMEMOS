@@ -76,7 +76,7 @@ public class UserController {
         newClient.setCart(newCart);
 
         newUser = userService.registerClient(newClient);
-        log.info("Client registered successfully: {}", newUser);
+        log.info("Client registered successfully: {}", (Client) newUser);
 
       } else {
         // Create regular user
