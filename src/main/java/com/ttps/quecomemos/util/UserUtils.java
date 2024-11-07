@@ -1,11 +1,12 @@
 package com.ttps.quecomemos.util;
 
+import com.ttps.quecomemos.dto.LoginUserDTO;
 import com.ttps.quecomemos.dto.UserRegisterDTO;
 import com.ttps.quecomemos.errors.ValidationDataException;
 
 public class UserUtils {
-  public static boolean isRegistrationDataComplete(
-      UserRegisterDTO userRegisterDTO) throws ValidationDataException {
+  public static boolean isRegistrationDataComplete(UserRegisterDTO userRegisterDTO)
+      throws ValidationDataException {
     if (userRegisterDTO.getDni() == null) {
       throw new ValidationDataException("dni", "Missing `dni` field");
     }
@@ -28,12 +29,24 @@ public class UserUtils {
     }
 
     if (userRegisterDTO.getRoleSelected() == null) {
-      throw new ValidationDataException("roleSelected",
-          "Missing `roleSelected` field");
+      throw new ValidationDataException("roleSelected", "Missing `roleSelected` field");
     }
 
     return true;
 
+  }
+
+  public static boolean isLoginDataComplete(LoginUserDTO loginUserDTO) {
+
+    if (loginUserDTO.getDni() == null) {
+      throw new ValidationDataException("dni", "Missing `dni` field");
+    }
+
+    if (loginUserDTO.getPassword() == null) {
+      throw new ValidationDataException("password", "Missing `password` field");
+    }
+
+    return true;
   }
 
 }

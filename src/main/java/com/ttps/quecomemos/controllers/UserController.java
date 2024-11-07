@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.ttps.quecomemos.dto.LoginUserDTO;
 import com.ttps.quecomemos.dto.UserRegisterDTO;
 import com.ttps.quecomemos.enums.UserRole;
 import com.ttps.quecomemos.errors.ValidationDataException;
@@ -124,6 +125,57 @@ public class UserController {
           "Unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
       return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  @PostMapping("/login")
+  @Operation(summary = "Login user", description = "Logs in an existing user")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "User logged in successfully"),
+      @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
+      @ApiResponse(responseCode = "401", description = "Incorrect password", content = @Content),
+      @ApiResponse(responseCode = "404", description = "User does not exist", content = @Content),
+      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
+  })
+  public ResponseEntity<ApiResponseDTO<User>> login(@RequestBody
+  LoginUserDTO loginUserDTO) {
+    log.info("Logging in user: {}", loginUserDTO);
+
+    try {
+      // Validate data
+      UserUtils.isLoginDataComplete(loginUserDTO);
+
+      // Check if user exists
+      User existingUser = userService.findUserByDNI(loginUserDTO.getDni());
+
+      if (existingUser == null) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+            String.format("User with `dni` %s does not exist", loginUserDTO.getDni()));
+      }
+
+      // Check if password is correct
+      if (!existingUser.getPassword().equals(loginUserDTO.getPassword())) {
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect password");
+      }
+
+      ApiResponseDTO<User> response = new ApiResponseDTO<>(existingUser,
+          "User logged in successfully", HttpStatus.OK);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+
+    } catch (ValidationDataException e) {
+      log.error("Validation error: {}", e.getMessage());
+      return handleValidationException(e);
+    } catch (ResponseStatusException e) {
+      log.error("Status error: {}", e.getMessage());
+      ApiResponseDTO<User> response = new ApiResponseDTO<>(null, e.getReason(),
+          HttpStatus.valueOf(e.getStatusCode().value()));
+      return new ResponseEntity<>(response, e.getStatusCode());
+    } catch (Exception e) {
+      log.error("Unexpected error logging in user", e);
+      ApiResponseDTO<User> response = new ApiResponseDTO<>(null,
+          "Unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+      return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
   }
 
   // Errors handlers
