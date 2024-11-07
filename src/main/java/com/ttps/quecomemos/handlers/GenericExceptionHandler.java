@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
 @Slf4j
-public class UserExceptionHandler {
+public class GenericExceptionHandler {
 
   @ExceptionHandler(ValidationDataException.class)
   public ResponseEntity<ApiResponseDTO<?>> handleValidationException(
