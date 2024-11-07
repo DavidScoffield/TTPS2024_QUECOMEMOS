@@ -2,15 +2,27 @@ package com.ttps.quecomemos.dto;
 
 import com.ttps.quecomemos.enums.UserRole;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class UserRegisterDTO {
 
-  private String dni;
-  private String password;
-  private String repeatPassword;
-  private String name;
-  private String email;
-  private UserRole roleSelected;
+    @NotNull
+    private String dni;
+
+    @NotNull
+    private String password;
+
+    @NotNull
+    private String repeatPassword;
+
+    @NotNull
+    private String name;
+
+    @NotNull
+    private String email;
+
+    @NotNull
+    private UserRole roleSelected;
 }

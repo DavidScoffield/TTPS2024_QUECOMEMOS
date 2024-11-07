@@ -19,14 +19,20 @@ import com.ttps.quecomemos.model.Client;
 import com.ttps.quecomemos.model.ShoppingCart;
 import com.ttps.quecomemos.model.User;
 import com.ttps.quecomemos.services.UserService;
-import com.ttps.quecomemos.util.ApiResponse;
+import com.ttps.quecomemos.util.ApiResponseDTO;
 import com.ttps.quecomemos.util.UserUtils;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/users")
 @Slf4j
+@Tag(name = "User Controller", description = "Operations related to users")
 public class UserController {
 
   @Autowired
@@ -42,7 +48,14 @@ public class UserController {
    *         (Internal Server Error).
    */
   @PostMapping("/register")
-  public ResponseEntity<ApiResponse<User>> registerUser(@RequestBody
+  @Operation(summary = "Register a new user", description = "Registers a new user in the system")
+  @ApiResponses({
+      @ApiResponse(responseCode = "201", description = "User registered successfully"),
+      @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
+      @ApiResponse(responseCode = "409", description = "User already exists", content = @Content),
+      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
+  })
+  public ResponseEntity<ApiResponseDTO<User>> registerUser(@RequestBody
   UserRegisterDTO userRegisterDTO) {
     log.info("Registering user: {}", userRegisterDTO);
 
@@ -88,7 +101,7 @@ public class UserController {
         log.info("User registered successfully: {}", newUser);
       }
 
-      ApiResponse<User> response = new ApiResponse<>(newUser,
+      ApiResponseDTO<User> response = new ApiResponseDTO<>(newUser,
           "User registered successfully", HttpStatus.CREATED);
       return new ResponseEntity<>(response, HttpStatus.CREATED);
 
@@ -97,46 +110,46 @@ public class UserController {
       return handleValidationException(e);
     } catch (ResponseStatusException e) {
       log.error("Status error: {}", e.getMessage());
-      ApiResponse<User> response = new ApiResponse<>(null, e.getReason(),
+      ApiResponseDTO<User> response = new ApiResponseDTO<>(null, e.getReason(),
           HttpStatus.valueOf(e.getStatusCode().value()));
       return new ResponseEntity<>(response, e.getStatusCode());
     } catch (DataIntegrityViolationException e) {
       log.error("Data integrity violation: {}", e.getMessage());
-      ApiResponse<User> response = new ApiResponse<>(null, "User already exists",
+      ApiResponseDTO<User> response = new ApiResponseDTO<>(null, "User already exists",
           HttpStatus.CONFLICT);
       return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     } catch (Exception e) {
       log.error("Unexpected error registering user", e);
-      ApiResponse<User> response = new ApiResponse<>(null, "Unexpected error occurred",
-          HttpStatus.INTERNAL_SERVER_ERROR);
+      ApiResponseDTO<User> response = new ApiResponseDTO<>(null,
+          "Unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
       return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   // Errors handlers
   @ExceptionHandler(ValidationDataException.class)
-  private ResponseEntity<ApiResponse<User>> handleValidationException(
+  private ResponseEntity<ApiResponseDTO<User>> handleValidationException(
       ValidationDataException e) {
-    ApiResponse<User> response = new ApiResponse<>(null, e.getMessage(),
+    ApiResponseDTO<User> response = new ApiResponseDTO<>(null, e.getMessage(),
         HttpStatus.BAD_REQUEST);
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
-  public ResponseEntity<ApiResponse<Void>> handleHttpMessageNotReadable(
+  public ResponseEntity<ApiResponseDTO<Void>> handleHttpMessageNotReadable(
       HttpMessageNotReadableException e) {
     String errorMessage = "Invalid input for `roleSelected`. Accepted values are: SHIFT_MANAGER, CLIENT, ADMIN.";
     log.error("Invalid UserRole provided: {}", e.getMessage());
-    ApiResponse<Void> response = new ApiResponse<>(null, errorMessage,
+    ApiResponseDTO<Void> response = new ApiResponseDTO<>(null, errorMessage,
         HttpStatus.BAD_REQUEST);
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<ApiResponse<Void>> handleGenericException(Exception e) {
+  public ResponseEntity<ApiResponseDTO<Void>> handleGenericException(Exception e) {
     log.error("Unexpected error: {}", e.getMessage());
-    ApiResponse<Void> response = new ApiResponse<>(null, "Unexpected error occurred",
-        HttpStatus.INTERNAL_SERVER_ERROR);
+    ApiResponseDTO<Void> response = new ApiResponseDTO<>(null,
+        "Unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
     return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 

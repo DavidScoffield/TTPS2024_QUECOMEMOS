@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,17 +21,23 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "user_id")
+  @NotNull
   private Long id;
 
   @Column(unique = true)
+  @NotNull
   private String dni;
 
+  @NotNull
   private String password;
 
+  @NotNull
   private String name;
 
+  @NotNull
   private String email;
 
+  @NotNull
   private String role;
 
   public User(String dni, String name, String email, String password, String role) {
