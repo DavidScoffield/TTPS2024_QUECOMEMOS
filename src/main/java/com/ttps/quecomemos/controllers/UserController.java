@@ -132,8 +132,7 @@ public class UserController {
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "User logged in successfully"),
       @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
-      @ApiResponse(responseCode = "401", description = "Incorrect password", content = @Content),
-      @ApiResponse(responseCode = "404", description = "User does not exist", content = @Content),
+      @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content),
       @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
   })
   public ResponseEntity<ApiResponseDTO<User>> login(@RequestBody
@@ -148,13 +147,13 @@ public class UserController {
       User existingUser = userService.findUserByDNI(loginUserDTO.getDni());
 
       if (existingUser == null) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-            String.format("User with `dni` %s does not exist", loginUserDTO.getDni()));
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+            String.format("Invalid credentials", loginUserDTO.getDni()));
       }
 
       // Check if password is correct
       if (!existingUser.getPassword().equals(loginUserDTO.getPassword())) {
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect password");
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
       }
 
       ApiResponseDTO<User> response = new ApiResponseDTO<>(existingUser,
