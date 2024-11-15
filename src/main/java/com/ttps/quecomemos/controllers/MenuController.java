@@ -19,6 +19,7 @@ import com.ttps.quecomemos.dto.MenuRegisterDTO;
 import com.ttps.quecomemos.model.Menu;
 import com.ttps.quecomemos.services.MenuService;
 import com.ttps.quecomemos.util.ApiResponseDTO;
+import com.ttps.quecomemos.util.MenuUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -53,6 +54,8 @@ public class MenuController {
   public ResponseEntity<ApiResponseDTO<Menu>> registerMenu(@RequestBody
   MenuRegisterDTO menuRegisterDTO) {
     log.info("Registering menu: {}", menuRegisterDTO);
+
+    MenuUtils.isDataComplete(menuRegisterDTO);
 
     try {
       Menu newMenu = menuService.registerNewMenu(menuRegisterDTO);
@@ -97,7 +100,7 @@ public class MenuController {
   /**
    * Updates an existing menu.
    *
-   * @param id      The id of the menu to be updated.
+   * @param id            The id of the menu to be updated.
    * @param updateMenuDTO The updated menu object.
    * @return A ResponseEntity containing the updated menu and an HTTP status code.
    */
@@ -112,6 +115,8 @@ public class MenuController {
   Long id, @RequestBody
   MenuRegisterDTO updateMenuDTO) {
     log.info("Updating menu with id: {}", id);
+
+    MenuUtils.isDataComplete(updateMenuDTO);
 
     try {
       Menu updatedMenu = menuService.updateMenu(id, updateMenuDTO);
