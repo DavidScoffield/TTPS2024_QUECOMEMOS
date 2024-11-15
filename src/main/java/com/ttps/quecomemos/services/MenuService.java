@@ -3,14 +3,12 @@ package com.ttps.quecomemos.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.ttps.quecomemos.model.Menu;
-import com.ttps.quecomemos.dto.FoodRegisterDTO;
 import com.ttps.quecomemos.dto.MenuRegisterDTO;
-import com.ttps.quecomemos.model.Food;
+import com.ttps.quecomemos.model.Menu;
 import com.ttps.quecomemos.repository.MenuRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +53,7 @@ public class MenuService {
   public Menu updateMenu(String menuName, MenuRegisterDTO updateMenuDTO) {
   	Menu existingMenu= this.findMenuByName(menuName);
   	if (existingMenu == null) {
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid menu");
       }
 
     existingMenu.updateDetails(updateMenuDTO);
