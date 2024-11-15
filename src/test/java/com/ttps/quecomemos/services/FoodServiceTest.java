@@ -35,7 +35,7 @@ public class FoodServiceTest {
     food.setName("Pizza");
     foodRepository.save(food); // Guardar en la base de datos de pruebas
 
-    Food result = foodService.getByName("Pizza");
+    Food result = foodService.findFoodByName("Pizza");
 
     assertNotNull(result);
     assertEquals("Pizza", result.getName());
@@ -49,7 +49,7 @@ public class FoodServiceTest {
     food2.setType("Italian");
     foodRepository.saveAll(Arrays.asList(food1, food2)); // Guardar en la base de datos de pruebas
 
-    List<Food> result = foodService.getByType("Italian");
+    List<Food> result = foodService.findFoodByType("Italian");
 
     assertEquals(2, result.size());
   }
@@ -62,7 +62,7 @@ public class FoodServiceTest {
     food2.setIsVegetarian(true);
     foodRepository.saveAll(Arrays.asList(food1, food2)); // Guardar en la base de datos de pruebas
 
-    List<Food> result = foodService.getVegetarians();
+    List<Food> result = foodService.findFoodByIsVegetarian();
 
     assertEquals(2, result.size());
   }
@@ -75,7 +75,7 @@ public class FoodServiceTest {
     food2.setIsVegetarian(false);
     foodRepository.saveAll(Arrays.asList(food1, food2));
 
-    List<Food> result = foodService.getNonVegetarians();
+    List<Food> result = foodService.findFoodByIsNotVegetarian();
 
     assertEquals(2, result.size());
   }

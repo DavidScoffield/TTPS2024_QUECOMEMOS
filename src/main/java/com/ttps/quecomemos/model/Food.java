@@ -1,5 +1,7 @@
 package com.ttps.quecomemos.model;
 
+import com.ttps.quecomemos.dto.FoodRegisterDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,5 +31,22 @@ public class Food {
     this.name = name;
     this.isVegetarian = isVegetarian;
     this.type = type;
+  }
+  
+  @Override
+  public String toString() {
+    return "Food{name='" + getName() + "', type='" + getType() + "'}";
+  }
+
+  public void updateDetails(FoodRegisterDTO newFoodDTO) {
+    if (!newFoodDTO.getName().isEmpty()) {
+      setName(newFoodDTO.getName());
+    }
+    if (!newFoodDTO.getType().isEmpty()) {
+      setType(newFoodDTO.getType());
+    }
+    
+    setIsVegetarian(newFoodDTO.getIsVegetarian());
+
   }
 }

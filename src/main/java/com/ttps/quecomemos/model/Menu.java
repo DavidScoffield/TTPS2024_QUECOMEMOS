@@ -2,6 +2,8 @@ package com.ttps.quecomemos.model;
 
 import java.util.List;
 
+import com.ttps.quecomemos.dto.MenuRegisterDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -36,10 +38,23 @@ public class Menu {
   @JoinTable(name = "menu_food", joinColumns = @JoinColumn(name = "menu_id"), inverseJoinColumns = @JoinColumn(name = "food_id"))
   private List<Food> foods;
 
-  public Menu(String name, String picture, Float price) {
+  public Menu(String name, String picture, Float price, List<Food> foods) {
     this.name = name;
     this.picture = picture;
     this.price = price;
+    this.foods= foods;
+  }
+  
+  public void updateDetails(MenuRegisterDTO newMenuDTO) {
+    if (!newMenuDTO.getName().isEmpty()) {
+      setName(newMenuDTO.getName());
+    }
+    setPrice(newMenuDTO.getPrice());
+    
+    setFoods(newMenuDTO.getFoods());
+    
+    setPicture(newMenuDTO.getPicture());
+
   }
 
 }
