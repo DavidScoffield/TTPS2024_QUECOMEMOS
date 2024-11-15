@@ -3,8 +3,8 @@ package com.ttps.quecomemos.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.ttps.quecomemos.dto.FoodRegisterDTO;
@@ -56,7 +56,7 @@ public class FoodService {
   public Food updateFood(String foodName, FoodRegisterDTO updateFoodDTO) {
 	  	Food existingFood= this.findFoodByName(foodName);
 	  	if (existingFood == null) {
-	        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+	        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid food name");
 	      }
 
 	    existingFood.updateDetails(updateFoodDTO);
