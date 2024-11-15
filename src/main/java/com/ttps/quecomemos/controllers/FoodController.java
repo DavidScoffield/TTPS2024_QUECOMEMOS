@@ -1,27 +1,25 @@
 package com.ttps.quecomemos.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.ttps.quecomemos.dto.FoodRegisterDTO;
-import com.ttps.quecomemos.handlers.GenericExceptionHandler;
 import com.ttps.quecomemos.model.Food;
 import com.ttps.quecomemos.services.FoodService;
 import com.ttps.quecomemos.util.ApiResponseDTO;
 import com.ttps.quecomemos.util.FoodUtils;
-
-import java.util.List;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,9 +36,6 @@ public class FoodController {
 
   @Autowired
   private FoodService foodService;
-
-  @Autowired
-  private GenericExceptionHandler exceptionHandler;
 
   /**
    * Handles the registration of a new food.
@@ -72,40 +67,41 @@ public class FoodController {
     return new ResponseEntity<>(response, HttpStatus.CREATED);
 
   }
-  
+
   /**
    * Lists all foods in the system.
    *
    * @return A ResponseEntity containing a list of foods and an HTTP status code. - If the
-   *         retrieval is successful, returns the list of foods and HTTP status 200 (OK). - If
-   *         an error occurs, returns null and HTTP status 500 (Internal Server Error).
+   *         retrieval is successful, returns the list of foods and HTTP status 200 (OK).
+   *         - If an error occurs, returns null and HTTP status 500 (Internal Server
+   *         Error).
    */
-  @GetMapping("/list")
+  @GetMapping()
   @Operation(summary = "List all foods", description = "Retrieves a list of all foods in the system")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Foods retrieved successfully"),
       @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
   })
   public ResponseEntity<ApiResponseDTO<List<Food>>> getAllFoods() {
-      log.info("Listing all foods");
+    log.info("Listing all foods");
 
-      try {
-          List<Food> foodList = foodService.getAllFoods();
-          ApiResponseDTO<List<Food>> response = new ApiResponseDTO<>(foodList, "Foods retrieved successfully", HttpStatus.OK);
-          return new ResponseEntity<>(response, HttpStatus.OK);
-      } catch (Exception e) {
-          log.error("An error occurred while retrieving foods", e);
-          ApiResponseDTO<List<Food>> response = new ApiResponseDTO<>(null, "An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-          return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-      }
+    try {
+      List<Food> foodList = foodService.getAllFoods();
+      ApiResponseDTO<List<Food>> response = new ApiResponseDTO<>(foodList,
+          "Foods retrieved successfully", HttpStatus.OK);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    } catch (Exception e) {
+      log.error("An error occurred while retrieving foods", e);
+      ApiResponseDTO<List<Food>> response = new ApiResponseDTO<>(null,
+          "An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+      return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
-  
-  
 
   /**
    * Updates an existing food.
    * 
-   * @param foodName    The name of the actual food to be updated.
+   * @param foodName      The name of the actual food to be updated.
    * @param updateFoodDTO The updated food object.
    * @return A ResponseEntity containing the updated food and an HTTP status code.
    */
