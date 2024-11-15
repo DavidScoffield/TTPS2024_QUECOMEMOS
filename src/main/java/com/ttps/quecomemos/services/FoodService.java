@@ -1,6 +1,7 @@
 package com.ttps.quecomemos.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,7 @@ public class FoodService {
   public List<Food> findFoodByIsNotVegetarian() {
     return foodRepository.findByIsVegetarian(false);
   }
+ 
   
   public Food registerNewFood(FoodRegisterDTO foodRegisterDTO) {
 	    // Check if food exists
@@ -53,12 +55,12 @@ public class FoodService {
 	    return newFood;
 	  }
   
-  public Food updateFood(String foodName, FoodRegisterDTO updateFoodDTO) {
-	  	Food existingFood= this.findFoodByName(foodName);
-	  	if (existingFood == null) {
-	        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid food name");
+  public Food updateFood(Long foodId, FoodRegisterDTO updateFoodDTO) {
+	  	Optional<Food> optionalFood= foodRepository.findById(foodId);
+	  	if (!optionalFood.isPresent()) {
+	        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid food id");
 	      }
-
+	  	Food existingFood= optionalFood.get();
 	    existingFood.updateDetails(updateFoodDTO);
 
 	    return foodRepository.save(existingFood);

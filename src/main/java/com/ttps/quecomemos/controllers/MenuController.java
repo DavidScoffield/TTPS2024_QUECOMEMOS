@@ -97,24 +97,24 @@ public class MenuController {
   /**
    * Updates an existing menu.
    *
-   * @param menuName      The name of the menu to be updated.
+   * @param id      The id of the menu to be updated.
    * @param updateMenuDTO The updated menu object.
    * @return A ResponseEntity containing the updated menu and an HTTP status code.
    */
-  @PutMapping("/update/{menuName}")
-  @Operation(summary = "Update Menu", description = "Updates an existing menu by name")
+  @PutMapping("/update/{id}")
+  @Operation(summary = "Update Menu", description = "Updates an existing menu by id")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Menu updated successfully"),
       @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
       @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
   })
   public ResponseEntity<ApiResponseDTO<Menu>> updateMenu(@PathVariable
-  String menuName, @RequestBody
+  Long id, @RequestBody
   MenuRegisterDTO updateMenuDTO) {
-    log.info("Updating menu with name: {}", menuName);
+    log.info("Updating menu with id: {}", id);
 
     try {
-      Menu updatedMenu = menuService.updateMenu(menuName, updateMenuDTO);
+      Menu updatedMenu = menuService.updateMenu(id, updateMenuDTO);
       ApiResponseDTO<Menu> response = new ApiResponseDTO<>(updatedMenu,
           "Menu updated successfully", HttpStatus.OK);
       return new ResponseEntity<>(response, HttpStatus.OK);

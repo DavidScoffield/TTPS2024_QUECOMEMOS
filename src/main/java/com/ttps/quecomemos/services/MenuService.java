@@ -1,6 +1,7 @@
 package com.ttps.quecomemos.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,8 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.ttps.quecomemos.dto.MenuRegisterDTO;
+import com.ttps.quecomemos.model.Food;
 import com.ttps.quecomemos.model.Menu;
+import com.ttps.quecomemos.repository.FoodRepository;
 import com.ttps.quecomemos.repository.MenuRepository;
+import com.ttps.quecomemos.util.MenuUtils;
+import com.ttps.quecomemos.errors.ValidationDataException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +24,9 @@ public class MenuService {
 
   @Autowired
   private MenuRepository menuRepository;
+  
+  @Autowired
+  private FoodRepository foodRepository;
 
   public Menu findMenuByName(String name) {
     return menuRepository.findByName(name);
@@ -39,7 +47,18 @@ public class MenuService {
     if (existingMenu != null) {
       throw new ResponseStatusException(HttpStatus.CONFLICT, "Menu already exists");
     }
+    
+    MenuUtils.isDataComplete(menuRegisterDTO);
+    List<Long> foodIds = menuRegisterDTO.getFoodsIds();
+    List<Food> foodEntities = foodRepository.findAllById(foodIds);
+    if (foodEntities.size() != foodIds.size()) {
+        List<Long> missingIds = foodIds.stream()
+                                       .filter(id -> foodEntities.stream().noneMatch(food -> food.getId().equals(id)))
+                                       .toList();
 
+        throw new ValidationDataException("foodIds", "The following food IDs do not exist: " + missingIds);
+    }
+    menuRegisterDTO.setFoods(foodEntities);
     Menu newMenu = new Menu(menuRegisterDTO.getName(), menuRegisterDTO.getPicture(),
     	menuRegisterDTO.getPrice(), menuRegisterDTO.getFoods());
 
@@ -50,15 +69,29 @@ public class MenuService {
     return newMenu;
   }
   
-  public Menu updateMenu(String menuName, MenuRegisterDTO updateMenuDTO) {
-  	Menu existingMenu= this.findMenuByName(menuName);
-  	if (existingMenu == null) {
+  public Menu updateMenu(Long menuId, MenuRegisterDTO updateMenuDTO) {
+	Optional<Menu> optionalMenu = menuRepository.findById(menuId);
+  	
+  	if (optionalMenu.isPresent()) {
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid menu");
       }
+  	
+  	MenuUtils.isDataComplete(updateMenuDTO);
+    List<Long> foodIds = updateMenuDTO.getFoodsIds();
+    List<Food> foodEntities = foodRepository.findAllById(foodIds);
+    if (foodEntities.size() != foodIds.size()) {
+        List<Long> missingIds = foodIds.stream()
+                                       .filter(id -> foodEntities.stream().noneMatch(food -> food.getId().equals(id)))
+                                       .toList();
 
+        throw new ValidationDataException("foodIds", "The following food IDs do not exist: " + missingIds);
+    }
+    updateMenuDTO.setFoods(foodEntities);
+  	Menu existingMenu= optionalMenu.get();
     existingMenu.updateDetails(updateMenuDTO);
 
     return menuRepository.save(existingMenu);
   }
+  
 
 }

@@ -16,8 +16,10 @@ public class MenuRegisterDTO {
 
     @NotNull
     private Float price;
-
+    
     @NotNull
+    private List<Long> foodsIds;
+    
     private List<Food> foods;
 
     private String picture;

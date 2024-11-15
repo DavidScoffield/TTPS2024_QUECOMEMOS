@@ -101,28 +101,28 @@ public class FoodController {
   /**
    * Updates an existing food.
    * 
-   * @param foodName      The name of the actual food to be updated.
+   * @param id      The id of the actual food to be updated.
    * @param updateFoodDTO The updated food object.
    * @return A ResponseEntity containing the updated food and an HTTP status code.
    */
 
-  @PutMapping("/update/{foodName}")
-  @Operation(summary = "Update Food", description = "Updates an existing food. Requires name of the food to be updated and the updated food object.")
+  @PutMapping("/update/{id}")
+  @Operation(summary = "Update Food", description = "Updates an existing food. Requires id of the food to be updated and the updated food object.")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Food updated successfully"),
       @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
       @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
   })
   public ResponseEntity<ApiResponseDTO<Food>> updateFood(@PathVariable
-  String foodName, @RequestBody
+  Long id, @RequestBody
   FoodRegisterDTO updateFoodDTO) {
-    log.info("Updating food: {}", updateFoodDTO, " with name: {}", foodName);
+    log.info("Updating food: {}", updateFoodDTO, " with id: {}", id);
 
     // Validate data
     FoodUtils.isDataComplete(updateFoodDTO);
 
     // Update food
-    Food updatedFood = foodService.updateFood(foodName, updateFoodDTO);
+    Food updatedFood = foodService.updateFood(id, updateFoodDTO);
 
     ApiResponseDTO<Food> response = new ApiResponseDTO<>(updatedFood,
         "Food updated successfully", HttpStatus.OK);

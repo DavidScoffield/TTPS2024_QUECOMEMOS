@@ -1,5 +1,6 @@
 package com.ttps.quecomemos.util;
 
+
 import com.ttps.quecomemos.dto.MenuRegisterDTO;
 import com.ttps.quecomemos.errors.ValidationDataException;
 
@@ -14,9 +15,9 @@ public class MenuUtils {
 	    if (menuRegisterDTO.getPrice() == null) {
 	      throw new ValidationDataException("price", "Missing `price` field");
 	    }
-
-	    if (menuRegisterDTO.getFoods() == null) {
-	      throw new ValidationDataException("foods", "Missing `foods` field");
+	    
+	    if (menuRegisterDTO.getFoodsIds() == null || menuRegisterDTO.getFoodsIds().isEmpty()) {
+	        throw new ValidationDataException("foodIds", "The `foodIds` list is empty or missing.");
 	    }
 
 	    return true;
