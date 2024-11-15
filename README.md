@@ -31,8 +31,28 @@ docker compose up
 mvn install
 ```
 
+## Levantar ambiente de desarrollo
+
+```bash
+mvn spring-boot:run
+```
+
 ## Ejecución de TEST
 
 ```bash
 mvn test
 ```
+
+## Documentación API
+
+### Postman
+
+Puede acceder a los endpoints de prueba en el archivo TTPS-QUECOMEMOS.postman_collection.json. Importe este archivo en Postman para acceder a los mismos.
+
+### Swagger
+
+La documentación de la API se encuentra en la ruta `/swagger-ui.html`.
+
+### Archivo
+
+También puede acceder a la documentación de la API en formato json en la ruta `/api-docs`.
