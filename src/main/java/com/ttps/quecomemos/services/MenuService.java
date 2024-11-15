@@ -70,8 +70,8 @@ public class MenuService {
   public Menu updateMenu(Long menuId, MenuRegisterDTO updateMenuDTO) {
     Optional<Menu> optionalMenu = menuRepository.findById(menuId);
 
-    if (optionalMenu.isPresent()) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid menu");
+    if (!optionalMenu.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid menu");
     }
 
     List<Long> foodIds = updateMenuDTO.getFoodsIds();

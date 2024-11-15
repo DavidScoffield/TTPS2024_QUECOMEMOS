@@ -85,23 +85,17 @@ public class FoodController {
   public ResponseEntity<ApiResponseDTO<List<Food>>> getAllFoods() {
     log.info("Listing all foods");
 
-    try {
-      List<Food> foodList = foodService.getAllFoods();
-      ApiResponseDTO<List<Food>> response = new ApiResponseDTO<>(foodList,
-          "Foods retrieved successfully", HttpStatus.OK);
-      return new ResponseEntity<>(response, HttpStatus.OK);
-    } catch (Exception e) {
-      log.error("An error occurred while retrieving foods", e);
-      ApiResponseDTO<List<Food>> response = new ApiResponseDTO<>(null,
-          "An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-      return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    List<Food> foodList = foodService.getAllFoods();
+    ApiResponseDTO<List<Food>> response = new ApiResponseDTO<>(foodList,
+        "Foods retrieved successfully", HttpStatus.OK);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+
   }
 
   /**
    * Updates an existing food.
    * 
-   * @param id      The id of the actual food to be updated.
+   * @param id            The id of the actual food to be updated.
    * @param updateFoodDTO The updated food object.
    * @return A ResponseEntity containing the updated food and an HTTP status code.
    */

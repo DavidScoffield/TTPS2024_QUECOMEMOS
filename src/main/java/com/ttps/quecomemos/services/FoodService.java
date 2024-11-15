@@ -36,39 +36,37 @@ public class FoodService {
   public List<Food> findFoodByIsNotVegetarian() {
     return foodRepository.findByIsVegetarian(false);
   }
- 
-  
+
   public Food registerNewFood(FoodRegisterDTO foodRegisterDTO) {
-	    // Check if food exists
-	    Food existingFood = this.findFoodByName(foodRegisterDTO.getName());
-	    if (existingFood != null) {
-	      throw new ResponseStatusException(HttpStatus.CONFLICT, "Food already exists");
-	    }
+    // Check if food exists
+    Food existingFood = this.findFoodByName(foodRegisterDTO.getName());
+    if (existingFood != null) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "Food already exists");
+    }
 
-	    Food newFood = new Food(foodRegisterDTO.getName(), foodRegisterDTO.getIsVegetarian(),
-	    	foodRegisterDTO.getType());
+    Food newFood = new Food(foodRegisterDTO.getName(), foodRegisterDTO.getIsVegetarian(),
+        foodRegisterDTO.getType());
 
-	    foodRepository.save(newFood);
+    foodRepository.save(newFood);
 
-	    log.info("Food registered successfully: {}", newFood);
+    log.info("Food registered successfully: {}", newFood);
 
-	    return newFood;
-	  }
-  
+    return newFood;
+  }
+
   public Food updateFood(Long foodId, FoodRegisterDTO updateFoodDTO) {
-	  	Optional<Food> optionalFood= foodRepository.findById(foodId);
-	  	if (!optionalFood.isPresent()) {
-	        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid food id");
-	      }
-	  	Food existingFood= optionalFood.get();
-	    existingFood.updateDetails(updateFoodDTO);
+    Optional<Food> optionalFood = foodRepository.findById(foodId);
+    if (!optionalFood.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid food id");
+    }
+    Food existingFood = optionalFood.get();
+    existingFood.updateDetails(updateFoodDTO);
 
-	    return foodRepository.save(existingFood);
+    return foodRepository.save(existingFood);
   }
-  
-  public List<Food> getAllFoods (){
-	  return foodRepository.findAll();
+
+  public List<Food> getAllFoods() {
+    return foodRepository.findAll();
   }
-  
-  
+
 }

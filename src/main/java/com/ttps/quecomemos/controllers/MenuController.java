@@ -57,17 +57,11 @@ public class MenuController {
 
     MenuUtils.isDataComplete(menuRegisterDTO);
 
-    try {
-      Menu newMenu = menuService.registerNewMenu(menuRegisterDTO);
-      ApiResponseDTO<Menu> response = new ApiResponseDTO<>(newMenu,
-          "Menu registered successfully", HttpStatus.CREATED);
-      return new ResponseEntity<>(response, HttpStatus.CREATED);
-    } catch (Exception e) {
-      log.error("Error registering menu", e);
-      ApiResponseDTO<Menu> response = new ApiResponseDTO<>(null,
-          "Unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-      return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    Menu newMenu = menuService.registerNewMenu(menuRegisterDTO);
+    ApiResponseDTO<Menu> response = new ApiResponseDTO<>(newMenu,
+        "Menu registered successfully", HttpStatus.CREATED);
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
+
   }
 
   /**
@@ -84,17 +78,11 @@ public class MenuController {
   public ResponseEntity<ApiResponseDTO<List<Menu>>> getAllMenus() {
     log.info("Listing all menus");
 
-    try {
-      List<Menu> menuList = menuService.getAllMenus();
-      ApiResponseDTO<List<Menu>> response = new ApiResponseDTO<>(menuList,
-          "Menus retrieved successfully", HttpStatus.OK);
-      return new ResponseEntity<>(response, HttpStatus.OK);
-    } catch (Exception e) {
-      log.error("An error occurred while retrieving menus", e);
-      ApiResponseDTO<List<Menu>> response = new ApiResponseDTO<>(null,
-          "An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-      return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    List<Menu> menuList = menuService.getAllMenus();
+    ApiResponseDTO<List<Menu>> response = new ApiResponseDTO<>(menuList,
+        "Menus retrieved successfully", HttpStatus.OK);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+
   }
 
   /**
@@ -118,17 +106,11 @@ public class MenuController {
 
     MenuUtils.isDataComplete(updateMenuDTO);
 
-    try {
-      Menu updatedMenu = menuService.updateMenu(id, updateMenuDTO);
-      ApiResponseDTO<Menu> response = new ApiResponseDTO<>(updatedMenu,
-          "Menu updated successfully", HttpStatus.OK);
-      return new ResponseEntity<>(response, HttpStatus.OK);
-    } catch (Exception e) {
-      log.error("Error updating menu", e);
-      ApiResponseDTO<Menu> response = new ApiResponseDTO<>(null,
-          "Unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-      return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    Menu updatedMenu = menuService.updateMenu(id, updateMenuDTO);
+    ApiResponseDTO<Menu> response = new ApiResponseDTO<>(updatedMenu,
+        "Menu updated successfully", HttpStatus.OK);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
