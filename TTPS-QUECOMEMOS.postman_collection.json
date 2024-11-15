@@ -112,7 +112,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"ensalada de lechuga y tomate\",\r\n    \"type\": \"Vegetariano\",\r\n    \"isVegetarian\": true\r\n}",
+							"raw": "{\r\n    \"name\": \"ensalada de lechuga,tomate\",\r\n    \"type\": \"Vegetariano\",\r\n    \"isVegetarian\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -210,7 +210,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"menu ensalada y sprite\",\r\n    \"price\": 9999.9,\r\n    \"picture\": \"image/test\",\r\n    \"foods\": [1,2,3]\r\n}",
+							"raw": "{\r\n    \"name\": \"menu ensalada y sprite\",\r\n    \"price\": 9999.9,\r\n    \"picture\": \"image/test\",\r\n    \"foodsIds\": [1,2]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -272,7 +272,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"menu ensalada y coca\",\r\n    \"price\": 9998.9,\r\n    \"picture\": \"image/test2\",\r\n    \"foods\": [1,2]\r\n}",
+							"raw": "{\r\n    \"name\": \"menu ensalada y coca\",\r\n    \"price\": 9998.9,\r\n    \"picture\": \"image/test2\",\r\n    \"foodsIds\": [1,2]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -280,7 +280,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/menus/update/1",
+							"raw": "http://localhost:8080/api/menus/update/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -290,7 +290,7 @@
 								"api",
 								"menus",
 								"update",
-								"1"
+								"2"
 							]
 						}
 					},
