@@ -2,8 +2,6 @@ package com.ttps.quecomemos.model;
 
 import java.util.List;
 
-import com.ttps.quecomemos.dto.MenuRegisterDTO;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -42,19 +40,7 @@ public class Menu {
     this.name = name;
     this.picture = picture;
     this.price = price;
-    this.foods= foods;
-  }
-  
-  public void updateDetails(MenuRegisterDTO newMenuDTO) {
-    if (!newMenuDTO.getName().isEmpty()) {
-      setName(newMenuDTO.getName());
-    }
-    setPrice(newMenuDTO.getPrice());
-    
-    setFoods(newMenuDTO.getFoods());
-    
-    setPicture(newMenuDTO.getPicture());
-
+    this.foods = foods;
   }
 
 }

@@ -86,7 +86,16 @@ public class MenuService {
     }
     updateMenuDTO.setFoods(foodEntities);
     Menu existingMenu = optionalMenu.get();
-    existingMenu.updateDetails(updateMenuDTO);
+
+    // Update menu
+    if (!updateMenuDTO.getName().isEmpty()) {
+      existingMenu.setName(updateMenuDTO.getName());
+    }
+    existingMenu.setPrice(updateMenuDTO.getPrice());
+
+    existingMenu.setFoods(updateMenuDTO.getFoods());
+
+    existingMenu.setPicture(updateMenuDTO.getPicture());
 
     return menuRepository.save(existingMenu);
   }
