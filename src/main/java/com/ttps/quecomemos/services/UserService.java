@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.ttps.quecomemos.dto.ClientWithoutPasswordDTO;
 import com.ttps.quecomemos.dto.LoginUserDTO;
 import com.ttps.quecomemos.dto.UpdateClientDTO;
 import com.ttps.quecomemos.dto.UserRegisterDTO;
+import com.ttps.quecomemos.dto.UserWithoutPasswordDTO;
 import com.ttps.quecomemos.enums.UserRole;
 import com.ttps.quecomemos.model.Client;
 import com.ttps.quecomemos.model.ShoppingCart;
@@ -61,7 +63,7 @@ public class UserService {
     return null;
   }
 
-  public User registerNewUser(UserRegisterDTO userRegisterDTO) {
+  public UserWithoutPasswordDTO registerNewUser(UserRegisterDTO userRegisterDTO) {
     // Check if user exists
     User existingUser = this.findUserByDNI(userRegisterDTO.getDni());
     if (existingUser != null) {
@@ -80,15 +82,26 @@ public class UserService {
 
       log.info("Client registered successfully: {}", (Client) newClient);
 
-      return newClient;
+      ClientWithoutPasswordDTO clientWithoutPasswordDTO = new ClientWithoutPasswordDTO(
+          newClient.getId(), newClient.getDni(), newClient.getName(),
+          newClient.getEmail(), newClient.getRole(), newClient.getPhoto(),
+          newClient.getCart());
+
+      return clientWithoutPasswordDTO;
     } else {
       User newUser = new User(userRegisterDTO.getDni(), userRegisterDTO.getName(),
           userRegisterDTO.getEmail(), userRegisterDTO.getPassword(),
           userRegisterDTO.getRoleSelected().toString());
 
+      userRepository.save(newUser);
+
       log.info("User registered successfully: {}", newUser);
 
-      return userRepository.save(newUser);
+      UserWithoutPasswordDTO userWithoutPasswordDTO = new UserWithoutPasswordDTO(
+          newUser.getId(), newUser.getDni(), newUser.getName(), newUser.getEmail(),
+          newUser.getRole());
+
+      return userWithoutPasswordDTO;
     }
   }
 
@@ -98,6 +111,7 @@ public class UserService {
         || !existingUser.getPassword().equals(loginUserDTO.getPassword())) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
     }
+
     return existingUser;
   }
 

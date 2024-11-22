@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.ttps.quecomemos.dto.LoginUserDTO;
 import com.ttps.quecomemos.dto.UpdateClientDTO;
 import com.ttps.quecomemos.dto.UserRegisterDTO;
+import com.ttps.quecomemos.dto.UserWithoutPasswordDTO;
 import com.ttps.quecomemos.handlers.GenericExceptionHandler;
 import com.ttps.quecomemos.model.Client;
 import com.ttps.quecomemos.model.User;
@@ -59,19 +59,15 @@ public class UserController {
       @ApiResponse(responseCode = "409", description = "User already exists", content = @Content),
       @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
   })
-  public ResponseEntity<ApiResponseDTO<User>> registerUser(@RequestBody
+  public ResponseEntity<ApiResponseDTO<UserWithoutPasswordDTO>> registerUser(@RequestBody
   UserRegisterDTO userRegisterDTO) {
     log.info("Registering user: {}", userRegisterDTO);
 
     // Validate data
     UserUtils.isRegistrationDataComplete(userRegisterDTO);
 
-    if (!userRegisterDTO.getPassword().equals(userRegisterDTO.getRepeatPassword())) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
-    }
-
-    User newUser = userService.registerNewUser(userRegisterDTO);
-    ApiResponseDTO<User> response = new ApiResponseDTO<>(newUser,
+    UserWithoutPasswordDTO newUser = userService.registerNewUser(userRegisterDTO);
+    ApiResponseDTO<UserWithoutPasswordDTO> response = new ApiResponseDTO<>(newUser,
         "User registered successfully", HttpStatus.CREATED);
     return new ResponseEntity<>(response, HttpStatus.CREATED);
 
