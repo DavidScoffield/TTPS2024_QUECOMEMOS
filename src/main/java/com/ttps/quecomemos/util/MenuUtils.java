@@ -13,6 +13,11 @@ public class MenuUtils {
     if (menuRegisterDTO.getPrice() == null) {
       throw new ValidationDataException("price", "Missing `price` field");
     }
+
+    if (menuRegisterDTO.getPrice() <= 0) {
+      throw new ValidationDataException("price", "The price must be greater than 0");
+    }
+
     if (menuRegisterDTO.getFoodsIds() == null || menuRegisterDTO.getFoodsIds().isEmpty()
         || menuRegisterDTO.getFoodsIds().contains(null)) {
       throw new ValidationDataException("foodIds",
