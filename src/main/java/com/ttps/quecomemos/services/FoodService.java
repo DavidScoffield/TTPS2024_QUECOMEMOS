@@ -60,7 +60,15 @@ public class FoodService {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid food id");
     }
     Food existingFood = optionalFood.get();
-    existingFood.updateDetails(updateFoodDTO);
+
+    if (!updateFoodDTO.getName().isEmpty()) {
+      existingFood.setName(updateFoodDTO.getName());
+    }
+    if (!updateFoodDTO.getType().isEmpty()) {
+      existingFood.setType(updateFoodDTO.getType());
+    }
+
+    existingFood.setIsVegetarian(updateFoodDTO.getIsVegetarian());
 
     return foodRepository.save(existingFood);
   }
