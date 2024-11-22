@@ -130,7 +130,22 @@ public class UserService {
       }
     }
 
-    existingClient.updateDetails(updateClientDTO);
+    // Update client
+    if (updateClientDTO.getName() != null && !updateClientDTO.getName().isEmpty()) {
+      existingClient.setName(updateClientDTO.getName());
+    }
+    if (updateClientDTO.getEmail() != null && !updateClientDTO.getEmail().isEmpty()) {
+      existingClient.setEmail(updateClientDTO.getEmail());
+    }
+
+    if (updateClientDTO.getNewPassword() != null
+        && !updateClientDTO.getNewPassword().isEmpty()) {
+      existingClient.setPassword(updateClientDTO.getNewPassword());
+    }
+
+    if (updateClientDTO.getPhoto() != null && !updateClientDTO.getPhoto().isEmpty()) {
+      existingClient.setPhoto(updateClientDTO.getPhoto());
+    }
 
     return clientRepository.save(existingClient);
   }

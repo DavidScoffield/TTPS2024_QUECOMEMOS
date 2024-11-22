@@ -3,7 +3,6 @@ package com.ttps.quecomemos.model;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.ttps.quecomemos.dto.UpdateClientDTO;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -47,25 +46,6 @@ public class Client extends User {
   @Override
   public String toString() {
     return "Client{name='" + getName() + "', dni='" + getDni() + "'}";
-  }
-
-  public void updateDetails(UpdateClientDTO updateClientDTO) {
-    if (updateClientDTO.getName() != null && !updateClientDTO.getName().isEmpty()) {
-      setName(updateClientDTO.getName());
-    }
-    if (updateClientDTO.getEmail() != null && !updateClientDTO.getEmail().isEmpty()) {
-      setEmail(updateClientDTO.getEmail());
-    }
-
-    if (updateClientDTO.getNewPassword() != null
-        && !updateClientDTO.getNewPassword().isEmpty()) {
-      setPassword(updateClientDTO.getNewPassword());
-    }
-
-    if (updateClientDTO.getPhoto() != null && !updateClientDTO.getPhoto().isEmpty()) {
-      setPhoto(updateClientDTO.getPhoto());
-    }
-
   }
 
 }
