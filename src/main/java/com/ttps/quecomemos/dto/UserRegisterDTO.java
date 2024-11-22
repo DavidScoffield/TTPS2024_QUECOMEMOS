@@ -8,21 +8,18 @@ import lombok.Data;
 @Data
 public class UserRegisterDTO {
 
-    @NotNull
-    private String dni;
+  @NotNull
+  private String dni;
 
-    @NotNull
-    private String password;
+  @NotNull
+  private String password;
 
-    @NotNull
-    private String repeatPassword;
+  @NotNull
+  private String name;
 
-    @NotNull
-    private String name;
+  @NotNull
+  private String email;
 
-    @NotNull
-    private String email;
-
-    @NotNull
-    private UserRole roleSelected;
+  @NotNull
+  private UserRole roleSelected;
 }
