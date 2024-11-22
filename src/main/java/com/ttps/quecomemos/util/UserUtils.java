@@ -24,11 +24,6 @@ public class UserUtils {
       throw new ValidationDataException("password", "Missing `password` field");
     }
 
-    if (userRegisterDTO.getRepeatPassword() == null) {
-      throw new ValidationDataException("repeatPassword",
-          "Missing `repeatPassword` field");
-    }
-
     if (userRegisterDTO.getRoleSelected() == null) {
       throw new ValidationDataException("roleSelected", "Missing `roleSelected` field");
     }
