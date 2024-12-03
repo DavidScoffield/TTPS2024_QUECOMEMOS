@@ -1,0 +1,17 @@
+<h2>Menus</h2>
+<button routerLink="/menu/new">Add New Menu</button>
+@for (menu of menus; track menu.id) {
+<div>
+  <h3>{{ menu.name }}</h3>
+  <p>{{ menu.picture }}</p>
+  <p>{{ menu.price }}</p>
+  <button [routerLink]="['/menu', menu.id]">Edit</button>
+  <button (click)="deleteMenu(menu.id!)">Delete</button>
+  <h4>Foods:</h4>
+  <ul>
+    @for (food of menu.foods; track food.id) {
+    <li>{{ food.name }} - {{ food.type }} - {{ food.isVegetarian}}</li>
+    }
+  </ul>
+</div>
+}

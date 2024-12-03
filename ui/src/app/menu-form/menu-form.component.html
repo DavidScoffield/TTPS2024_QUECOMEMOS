@@ -1,0 +1,31 @@
+<h2>{{ isEditMode ? 'Edit' : 'Create' }} Menu</h2>
+<form [formGroup]="menuForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="name">Name:</label>
+    <input id="name" formControlName="name" required>
+  </div>
+  <div>
+    <label for="description">Description:</label>
+    <textarea id="description" formControlName="description" required></textarea>
+  </div>
+  <h3>Foods</h3>
+  @for (food of foods.controls; track $index) {
+  <div [formGroup]="food">
+    <div>
+      <label>Name:</label>
+      <input formControlName="name" required>
+    </div>
+    <div>
+      <label>Description:</label>
+      <input formControlName="description" required>
+    </div>
+    <div>
+      <label>Price:</label>
+      <input type="number" formControlName="price" required>
+    </div>
+    <button type="button" (click)="removeFood($index)">Remove Food</button>
+  </div>
+  }
+  <button type="button" (click)="addFood()">Add Food</button>
+  <button type="submit" [disabled]="!menuForm.valid">Save Menu</button>
+</form>
