@@ -2,9 +2,10 @@
 import { Routes } from '@angular/router'
 import { MenuListComponent } from './menu-list/menu-list.component'
 import { MenuFormComponent } from './menu-form/menu-form.component'
+import { LoginRegisterTabs } from './login-register-tabs/login-register-tabs.component'
 
 export const routes: Routes = [
-  { path: '', component: MenuListComponent },
+  { path: '', component: LoginRegisterTabs },
   { path: 'menu/new', component: MenuFormComponent },
   { path: 'menu/:id', component: MenuFormComponent },
 ]

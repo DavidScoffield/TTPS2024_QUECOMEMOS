@@ -1,0 +1,76 @@
+<hlm-tabs tab="register" class="w-full dark">
+  <hlm-tabs-list class="w-full grid grid-cols-2" aria-label="tabs example">
+    <button hlmTabsTrigger="login">Iniciar Sesión</button>
+    <button hlmTabsTrigger="register">Registrarse</button>
+  </hlm-tabs-list>
+  <div hlmTabsContent="login">
+    <section hlmCard>
+      <div hlmCardHeader>
+        <h3 hlmCardTitle>Iniciar Sesion</h3>
+        <p hlmCardDescription>
+          Inicia sesion con tu cuenta de usuario. Si no tienes una, puedes crearla en la pestaña de registro <button
+            hlmBtn [variant]="'link'" [size]="'sm'" hlmTabsTrigger="register" class="p-0 h-auto ">aquí</button>
+        </p>
+      </div>
+      <p hlmCardContent>
+        <label class="block my-4" hlmLabel>
+          DNI
+          <input class="mt-1.5 w-full" placeholder="Ingrese su DNI" hlmInput type="number" />
+        </label>
+        <label class="block my-4" hlmLabel>
+          Contraseña
+          <input class="mt-1.5 w-full" hlmInput type="password" placeholder="Ingrese su contraseña" />
+        </label>
+      </p>
+      <div hlmCardFooter>
+        <button hlmBtn>Ingresar</button>
+      </div>
+    </section>
+  </div>
+  <div hlmTabsContent="register">
+    <section hlmCard>
+      <div hlmCardHeader>
+        <h3 hlmCardTitle>Registrarse</h3>
+        <p hlmCardDescription>
+          Registrate para poder acceder a todos los servicios de la plataforma. Si ya tienes una cuenta, puedes iniciar
+          sesion en la pestaña de inicio de sesion <button hlmBtn [variant]="'link'" [size]="'sm'"
+            hlmTabsTrigger="login" class="p-0 h-auto">aquí</button>
+        </p>
+      </div>
+      <p hlmCardContent class="pb-0">
+        <label class="block my-4" hlmLabel>
+          DNI
+          <input class="mt-1.5 w-full" type="number" hlmInput placeholder="DNI con el que se va a registrar" />
+        </label>
+        <label class="block my-4" hlmLabel>
+          Contraseña
+          <input class="mt-1.5 w-full" type="password" hlmInput placeholder="Ingrese una contraseña" />
+        </label>
+        <label class="block my-4" hlmLabel>
+          Confirmar Contraseña
+          <input class="mt-1.5 w-full" type="password" hlmInput placeholder="Confirme su contraseña" />
+        </label>
+        <label class="block my-4" hlmLabel>
+          Correo Electrónico
+          <input class="mt-1.5 w-full" type="email" hlmInput placeholder="Ingrese su correo electrónico" />
+        </label>
+      </p>
+      <label class="block my-4 px-6" hlmLabel>
+        Rol
+        <brn-select class="block mt-1.5" placeholder="Seleccione un rol" [multiple]="false">
+          <hlm-select-trigger class="w-56">
+            <hlm-select-value />
+          </hlm-select-trigger>
+          <hlm-select-content>
+            <hlm-option value="CLIENTE">Cliente</hlm-option>
+            <hlm-option value="ADMIN">Administrador</hlm-option>
+            <hlm-option value="SHIFT_MANAGER">Responsable de Turno</hlm-option>
+          </hlm-select-content>
+        </brn-select>
+      </label>
+      <div hlmCardFooter>
+        <button hlmBtn>Registrarse</button>
+      </div>
+    </section>
+  </div>
+</hlm-tabs>
