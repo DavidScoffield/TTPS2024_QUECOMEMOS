@@ -8,69 +8,197 @@
       <div hlmCardHeader>
         <h3 hlmCardTitle>Iniciar Sesion</h3>
         <p hlmCardDescription>
-          Inicia sesion con tu cuenta de usuario. Si no tienes una, puedes crearla en la pestaña de registro <button
-            hlmBtn [variant]="'link'" [size]="'sm'" hlmTabsTrigger="register" class="p-0 h-auto ">aquí</button>
+          Inicia sesion con tu cuenta de usuario. Si no tienes una, puedes crearla en la pestaña de registro
+          <button hlmBtn [variant]="'link'" [size]="'sm'" hlmTabsTrigger="register" class="p-0 h-auto">aquí</button>
         </p>
       </div>
-      <p hlmCardContent>
-        <label class="block my-4" hlmLabel>
-          DNI
-          <input class="mt-1.5 w-full" placeholder="Ingrese su DNI" hlmInput type="number" />
-        </label>
-        <label class="block my-4" hlmLabel>
-          Contraseña
-          <input class="mt-1.5 w-full" hlmInput type="password" placeholder="Ingrese su contraseña" />
-        </label>
-      </p>
-      <div hlmCardFooter>
-        <button hlmBtn>Ingresar</button>
-      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <p hlmCardContent class="pb-0">
+          <label class="block my-4" hlmLabel>
+            DNI
+            <input class="mt-1.5 w-full" formControlName="dni" placeholder="Ingrese su DNI" hlmInput type="number" />
+
+            @if ( loginForm.get('dni')?.hasError('required') && loginForm.get('dni')?.touched
+            ) {
+            <small>
+              El DNI es obligatorio.
+            </small>
+
+            }
+
+            @if (loginForm.get('dni')?.hasError('minlength') && loginForm.get('dni')?.touched) {
+            <small>
+              El DNI debe tener al menos 7 caracteres.
+            </small>
+
+            }
+
+            @if (loginForm.get('dni')?.hasError('maxlength') && loginForm.get('dni')?.touched) {
+            <small>
+              El DNI no puede exceder los 8 caracteres.
+            </small>
+
+            }
+          </label>
+          <label class="block my-4" hlmLabel>
+            Contraseña
+            <input class="mt-1.5 w-full" formControlName="password" hlmInput type="password"
+              placeholder="Ingrese su contraseña" />
+
+            @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+            <small>
+              La contraseña es obligatoria.
+            </small>
+            }
+
+            @if (loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched) {
+            <small>
+              La contraseña debe tener al menos 6 caracteres.
+            </small>
+            }
+
+          </label>
+        </p>
+        <div hlmCardFooter>
+          <button hlmBtn [disabled]="loginForm.invalid">Ingresar</button>
+        </div>
+      </form>
     </section>
   </div>
+
   <div hlmTabsContent="register">
     <section hlmCard>
       <div hlmCardHeader>
         <h3 hlmCardTitle>Registrarse</h3>
         <p hlmCardDescription>
-          Registrate para poder acceder a todos los servicios de la plataforma. Si ya tienes una cuenta, puedes iniciar
-          sesion en la pestaña de inicio de sesion <button hlmBtn [variant]="'link'" [size]="'sm'"
-            hlmTabsTrigger="login" class="p-0 h-auto">aquí</button>
+          Registrate para acceder a todos los servicios de la plataforma. Si ya tienes una cuenta, puedes iniciar sesión
+          <button hlmBtn [variant]="'link'" [size]="'sm'" hlmTabsTrigger="login" class="p-0 h-auto">aquí</button>.
         </p>
       </div>
-      <p hlmCardContent class="pb-0">
-        <label class="block my-4" hlmLabel>
-          DNI
-          <input class="mt-1.5 w-full" type="number" hlmInput placeholder="DNI con el que se va a registrar" />
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+        <p hlmCardContent class="pb-0">
+          <label class="block my-4" hlmLabel>
+            DNI*
+            <input class="mt-1.5 w-full" type="number" formControlName="dni" hlmInput
+              placeholder="DNI con el que se va a registrar" />
+            <!-- Mensajes de error -->
+
+            @if (registerForm.get('dni')?.hasError('required') && registerForm.get('dni')?.touched) {
+            <small>
+              El DNI es obligatorio.
+            </small>
+            }
+
+            @if (registerForm.get('dni')?.hasError('minlength') && registerForm.get('dni')?.touched) {
+            <small>
+              El DNI debe tener al menos 7 caracteres.
+            </small>
+
+            }
+
+            @if (registerForm.get('dni')?.hasError('maxlength') && registerForm.get('dni')?.touched) {
+            <small>
+              El DNI no puede exceder los 8 caracteres.
+            </small>
+            }
+
+          </label>
+
+          <label class="block my-4" hlmLabel>
+            Contraseña*
+            <input class="mt-1.5 w-full" type="password" formControlName="password" hlmInput
+              placeholder="Ingrese una contraseña" />
+
+            @if (registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched) {
+            <small>
+              La contraseña es obligatoria.
+            </small>
+            }
+
+            @if (registerForm.get('password')?.hasError('minlength') && registerForm.get('password')?.touched) {
+            <small>
+              La contraseña debe tener al menos 6 caracteres.
+            </small>
+            }
+
+          </label>
+
+          <label class="block my-4" hlmLabel>
+            Confirmar Contraseña*
+            <input class="mt-1.5 w-full" type="password" formControlName="confirmPassword" hlmInput
+              placeholder="Confirme su contraseña" />
+
+            @if (registerForm.get('confirmPassword')?.hasError('required') &&
+            registerForm.get('confirmPassword')?.touched) {
+            <small>
+              La confirmación de la contraseña es obligatoria.
+            </small>
+            }
+
+            @if (registerForm.get('confirmPassword')?.hasError('minlength') &&
+            registerForm.get('confirmPassword')?.touched) {
+            <small>
+              La confirmación de la contraseña debe tener al menos 6 caracteres.
+            </small>
+            }
+
+            @if (registerForm.get('confirmPassword')?.hasError('passwordMismatch') &&
+            registerForm.get('confirmPassword')?.touched) {
+            <small>
+              Las contraseñas no coinciden.
+            </small>
+            }
+
+          </label>
+
+          <label class="block my-4" hlmLabel>
+            Correo Electrónico*
+            <input class="mt-1.5 w-full" type="email" formControlName="email" hlmInput
+              placeholder="Ingrese su correo electrónico" />
+
+            @if (registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched) {
+            <small>
+              El correo electrónico es obligatorio.
+            </small>
+            }
+
+            @if (registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched) {
+            <small>
+              El correo electrónico no es válido.
+            </small>
+            }
+
+          </label>
+        </p>
+
+
+        <label class="block my-4 px-6" hlmLabel>
+          Rol*
+          <brn-select class="block mt-1.5" placeholder="Seleccione un rol" formControlName="role" [multiple]="false">
+            <hlm-select-trigger class="w-56">
+              <hlm-select-value />
+            </hlm-select-trigger>
+            <hlm-select-content>
+              <hlm-option value="CLIENTE">Cliente</hlm-option>
+              <hlm-option value="ADMIN">Administrador</hlm-option>
+              <hlm-option value="SHIFT_MANAGER">Responsable de Turno</hlm-option>
+            </hlm-select-content>
+          </brn-select>
+
+          @if (registerForm.get('role')?.hasError('required') && registerForm.get('role')?.touched) {
+          <small>
+            El rol es obligatorio.
+          </small>
+          }
         </label>
-        <label class="block my-4" hlmLabel>
-          Contraseña
-          <input class="mt-1.5 w-full" type="password" hlmInput placeholder="Ingrese una contraseña" />
-        </label>
-        <label class="block my-4" hlmLabel>
-          Confirmar Contraseña
-          <input class="mt-1.5 w-full" type="password" hlmInput placeholder="Confirme su contraseña" />
-        </label>
-        <label class="block my-4" hlmLabel>
-          Correo Electrónico
-          <input class="mt-1.5 w-full" type="email" hlmInput placeholder="Ingrese su correo electrónico" />
-        </label>
-      </p>
-      <label class="block my-4 px-6" hlmLabel>
-        Rol
-        <brn-select class="block mt-1.5" placeholder="Seleccione un rol" [multiple]="false">
-          <hlm-select-trigger class="w-56">
-            <hlm-select-value />
-          </hlm-select-trigger>
-          <hlm-select-content>
-            <hlm-option value="CLIENTE">Cliente</hlm-option>
-            <hlm-option value="ADMIN">Administrador</hlm-option>
-            <hlm-option value="SHIFT_MANAGER">Responsable de Turno</hlm-option>
-          </hlm-select-content>
-        </brn-select>
-      </label>
-      <div hlmCardFooter>
-        <button hlmBtn>Registrarse</button>
-      </div>
+
+
+        <div hlmCardFooter>
+          <button hlmBtn [disabled]="registerForm.invalid">Registrarse</button>
+        </div>
+
+      </form>
     </section>
   </div>
+
 </hlm-tabs>
