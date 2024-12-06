@@ -27,6 +27,8 @@ import {
   HlmTabsListComponent,
   HlmTabsTriggerDirective,
 } from '@spartan-ng/ui-tabs-helm'
+import { CustomError } from '../../error/CustomError'
+import { UserService } from '../services/user.service'
 
 @Component({
   selector: 'login-register-tabs',
@@ -63,7 +65,7 @@ export class LoginRegisterTabs {
   loginForm: FormGroup
   registerForm: FormGroup
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private registerService: UserService) {
     this.loginForm = this.fb.group({
       dni: [
         '',
@@ -75,18 +77,18 @@ export class LoginRegisterTabs {
     this.registerForm = this.fb.group(
       {
         dni: [
-          '',
+          '1231231',
           [
             Validators.required,
             Validators.minLength(7),
             Validators.maxLength(8),
           ],
         ],
-        password: ['', [Validators.required, Validators.minLength(6)]],
-        confirmPassword: ['', [Validators.required]],
-        email: ['', [Validators.required, Validators.email]],
-        name: ['', [Validators.required]],
-        role: ['', [Validators.required]],
+        password: ['password', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['password', [Validators.required]],
+        email: ['1@gmail.com', [Validators.required, Validators.email]],
+        name: ['david', [Validators.required]],
+        role: ['CLIENT', [Validators.required]],
       },
       {
         validators: [this.matchPasswords('password', 'confirmPassword')],
@@ -101,9 +103,33 @@ export class LoginRegisterTabs {
   }
 
   onRegister() {
-    if (this.registerForm.valid) {
-      console.log('Formulario de Registro:', this.registerForm.value)
+    if (!this.registerForm.valid) {
+      console.log('Formulario inválido')
     }
+    const { dni, email, password, role, name } = this.registerForm.value
+
+    this.registerService
+      .register({ dni, email, password, roleSelected: role, name: '' })
+      .subscribe({
+        next: (response) => {
+          // this.snackBar.open('Registro exitoso', 'Cerrar', {
+          //   duration: 3000,
+          //   panelClass: ['success-snackbar'],
+          // })
+          console.log('Registro exitoso:', response)
+        },
+        error: (error: CustomError) => {
+          console.error('Error en el registro:', error)
+          // this.snackBar.open(
+          //   'Error al registrar. Intenta nuevamente.',
+          //   'Cerrar',
+          //   {
+          //     duration: 3000,
+          //     panelClass: ['error-snackbar'],
+          //   }
+          // )
+        },
+      })
   }
 
   private matchPasswords(passwordKey: string, confirmPasswordKey: string) {
