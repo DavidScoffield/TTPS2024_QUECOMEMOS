@@ -105,6 +105,36 @@
           </label>
 
           <label class="block my-4" hlmLabel>
+            Correo Electrónico*
+            <input class="mt-1.5 w-full" type="email" formControlName="email" hlmInput
+              placeholder="Ingrese su correo electrónico" />
+
+            @if (registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched) {
+            <small>
+              El correo electrónico es obligatorio.
+            </small>
+            }
+
+            @if (registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched) {
+            <small>
+              El correo electrónico no es válido.
+            </small>
+            }
+
+          </label>
+
+          <label>
+            Nombre*
+            <input class="mt-1.5 w-full" type="text" formControlName="name" hlmInput placeholder="Ingrese su nombre" />
+
+            @if (registerForm.get('name')?.hasError('required') && registerForm.get('name')?.touched) {
+            <small>
+              El nombre es obligatorio.
+            </small>
+            }
+          </label>
+
+          <label class="block my-4" hlmLabel>
             Contraseña*
             <input class="mt-1.5 w-full" type="password" formControlName="password" hlmInput
               placeholder="Ingrese una contraseña" />

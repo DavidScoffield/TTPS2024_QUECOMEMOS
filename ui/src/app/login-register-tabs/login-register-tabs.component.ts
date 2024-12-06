@@ -85,6 +85,7 @@ export class LoginRegisterTabs {
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', [Validators.required]],
         email: ['', [Validators.required, Validators.email]],
+        name: ['', [Validators.required]],
         role: ['', [Validators.required]],
       },
       {
