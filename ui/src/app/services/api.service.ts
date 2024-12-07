@@ -6,7 +6,7 @@ import {
 import { Injectable } from '@angular/core'
 import { Observable, throwError } from 'rxjs'
 import { catchError } from 'rxjs/operators'
-import { CustomError } from '../../error/CustomError'
+import { CustomError } from '../error/CustomError'
 
 // URL base de la API
 const API_URL = 'http://localhost:8080/api/'

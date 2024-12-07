@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { MenuService } from '../menu.service'
+import { MenuService } from '../services/menu.service'
 import { Food } from '../models/food.model'
 
 @Component({

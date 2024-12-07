@@ -3,20 +3,19 @@ import { hlm } from '@spartan-ng/ui-core';
 import { type VariantProps, cva } from 'class-variance-authority';
 import type { ClassValue } from 'clsx';
 
-export const inputErrorVariants = cva('text-destructive text-sm font-medium', {
+export const alertTitleVariants = cva('mb-1 font-medium leading-none tracking-tight', {
 	variants: {},
-	defaultVariants: {},
 });
-export type InputErrorVariants = VariantProps<typeof inputErrorVariants>;
+export type AlertTitleVariants = VariantProps<typeof alertTitleVariants>;
 
 @Directive({
-	selector: '[hlmInputError]',
+	selector: '[hlmAlertTitle]',
 	standalone: true,
 	host: {
 		'[class]': '_computedClass()',
 	},
 })
-export class HlmInputErrorDirective {
+export class HlmAlertTitleDirective {
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
-	protected _computedClass = computed(() => hlm(inputErrorVariants(), this.userClass()));
+	protected readonly _computedClass = computed(() => hlm(alertTitleVariants(), this.userClass()));
 }

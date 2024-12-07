@@ -19,7 +19,6 @@ import {
 } from '@spartan-ng/ui-card-helm'
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm'
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm'
-import { BrnSelectImports } from '@spartan-ng/ui-select-brain'
 import { HlmSelectImports } from '@spartan-ng/ui-select-helm'
 import {
   HlmTabsComponent,
@@ -27,8 +26,11 @@ import {
   HlmTabsListComponent,
   HlmTabsTriggerDirective,
 } from '@spartan-ng/ui-tabs-helm'
-import { CustomError } from '../../error/CustomError'
+import { CustomError } from '../error/CustomError'
 import { UserService } from '../services/user.service'
+import { toast } from 'ngx-sonner'
+import { BrnSelectImports } from '@spartan-ng/ui-select-brain'
+import { HlmToasterComponent } from '@spartan-ng/ui-sonner-helm'
 
 @Component({
   selector: 'login-register-tabs',
@@ -62,6 +64,16 @@ import { UserService } from '../services/user.service'
   templateUrl: './login-register-tabs.component.html',
 })
 export class LoginRegisterTabs {
+  showToast() {
+    console.log('toastr')
+    toast('Event has been created', {
+      description: 'Sunday, December 03, 2024 at 9:00 AM',
+      action: {
+        label: 'Undo',
+        onClick: () => console.log('Undo'),
+      },
+    })
+  }
   loginForm: FormGroup
   registerForm: FormGroup
 

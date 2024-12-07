@@ -1,8 +1,8 @@
 // src/app/menu.service.ts
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable } from 'rxjs'
-import { Menu } from './models/menu.model'
-import { Food } from './models/food.model'
+import { Menu } from '../models/menu.model'
+import { Food } from '../models/food.model'
 
 @Injectable({
   providedIn: 'root',
