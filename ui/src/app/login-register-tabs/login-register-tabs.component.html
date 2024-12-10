@@ -1,7 +1,7 @@
-<hlm-tabs tab="register" class="w-full dark">
+<hlm-tabs #tabs tab="login" class="w-full dark">
   <hlm-tabs-list class="w-full grid grid-cols-2" aria-label="tabs example">
-    <button hlmTabsTrigger="login">Iniciar Sesión</button>
-    <button hlmTabsTrigger="register">Registrarse</button>
+    <button #loginButton hlmTabsTrigger="login">Iniciar Sesión</button>
+    <button #registerButton hlmTabsTrigger="register">Registrarse</button>
   </hlm-tabs-list>
   <div hlmTabsContent="login">
     <section hlmCard>
@@ -214,5 +214,3 @@
   </div>
 
 </hlm-tabs>
-
-<button hlmBtn (click)="showToast()">Show Toast</button>

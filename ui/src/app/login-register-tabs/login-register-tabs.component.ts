@@ -121,27 +121,32 @@ export class LoginRegisterTabs {
     const { dni, email, password, role, name } = this.registerForm.value
 
     this.registerService
-      .register({ dni, email, password, roleSelected: role, name: '' })
+      .register({ dni, email, password, roleSelected: role, name })
       .subscribe({
         next: (response) => {
-          // this.snackBar.open('Registro exitoso', 'Cerrar', {
-          //   duration: 3000,
-          //   panelClass: ['success-snackbar'],
-          // })
-          console.log('Registro exitoso:', response)
+          toast.success('Usuario registrado', {
+            description: 'Ya puedes iniciar sesión con tu cuenta.',
+          })
+
+          this.resetForm(this.registerForm)
+
+          this.loginButtonComponent.nativeElement.click()
         },
         error: (error: CustomError) => {
           console.error('Error en el registro:', error)
-          // this.snackBar.open(
-          //   'Error al registrar. Intenta nuevamente.',
-          //   'Cerrar',
-          //   {
-          //     duration: 3000,
-          //     panelClass: ['error-snackbar'],
-          //   }
-          // )
+
+          toast.error('Error en el registro', {
+            description: error.message,
+          })
         },
       })
+  }
+
+  private resetForm(form: FormGroup) {
+    form.reset()
+    Object.keys(form.controls).forEach((key) => {
+      form.get(key)?.setErrors(null)
+    })
   }
 
   private matchPasswords(passwordKey: string, confirmPasswordKey: string) {
