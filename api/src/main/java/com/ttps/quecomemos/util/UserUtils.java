@@ -13,6 +13,10 @@ public class UserUtils {
             throw new ValidationDataException("dni", "Missing `dni` field");
         }
 
+        if (userRegisterDTO.getDni().length() < 7 || userRegisterDTO.getDni().length() > 8) {
+            throw new ValidationDataException("dni", "DNI must have 7 or 8 characters");
+        }
+
         if (userRegisterDTO.getName() == null || userRegisterDTO.getName().isEmpty()) {
             throw new ValidationDataException("name", "Missing `name` field");
         }
