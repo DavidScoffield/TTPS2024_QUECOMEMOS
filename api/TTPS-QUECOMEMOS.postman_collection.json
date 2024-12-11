@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"dni\":123123,\r\n    \"name\": \"david\",\r\n    \"email\": \"emial\",\r\n    \"password\":\"password\",\r\n    \"repeatPassword\": \"password\",\r\n    \"roleSelected\": \"CLIENT\"\r\n}",
+							"raw": "{\r\n    \"dni\":1231234,\r\n    \"name\": \"david\",\r\n    \"email\": \"emial\",\r\n    \"password\":\"password\",\r\n    \"repeatPassword\": \"password\",\r\n    \"roleSelected\": \"CLIENT\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -41,12 +41,28 @@
 				},
 				{
 					"name": "/api/users/login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get authorization token from response\", function () {\r",
+									"    var accesstoken = pm.response.headers.get(\"Authorization\");\r",
+									"    accesstoken = accesstoken.replace('Bearer ', ''); // Remove 'Bearer' word\r",
+									"    pm.environment.set(\"accessToken\", accesstoken);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"dni\": 123123,\r\n    \"password\": \"password\"\r\n}",
+							"raw": "{\r\n    \"dni\": 1231234,\r\n    \"password\": \"password\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -72,11 +88,21 @@
 				{
 					"name": "/api/users/update",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"dni\": 123123,\r\n    \"actualPassword\": \"password\",\r\n    \"newPassword\": \"pass\"\r\n}",
+							"raw": "{\r\n    \"dni\": 123123,\r\n    \"newPassword\": \"ap\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -108,6 +134,16 @@
 				{
 					"name": "/api/foods/register",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -141,6 +177,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -170,6 +216,16 @@
 				{
 					"name": "/api/foods/update",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
@@ -206,6 +262,16 @@
 				{
 					"name": "/api/menus/register",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -239,6 +305,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -268,6 +344,16 @@
 				{
 					"name": "/api/menus/update",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
@@ -297,6 +383,25 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "/initialize-data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/initialize-data",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"initialize-data"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
