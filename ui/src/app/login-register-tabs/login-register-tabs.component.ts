@@ -63,7 +63,7 @@ import { Router } from '@angular/router'
     }),
   ],
   host: {
-    class: 'block w-full max-w-lg mx-auto mt-10 mb-10',
+    class: 'block w-full max-w-lg mx-auto mt-24 mb-10',
   },
   templateUrl: './login-register-tabs.component.html',
 })
