@@ -16,16 +16,12 @@ public class DataInitializerController {
 
     // @Autowired
     // private FoodService foodService;
-
     // @Autowired
     // private MenuService menuService;
-
     // @Autowired
     // private OrderService orderService;
-
     // @Autowired
     // private SuggestionService suggestionService;
-
     @GetMapping("/initialize-data")
     public String initializeData() {
 
@@ -34,7 +30,7 @@ public class DataInitializerController {
                 "david scoffield", "david@gmail.com", UserRole.CLIENT));
         userService.registerNewUser(new UserRegisterDTO("12341235", "password",
                 "john doe", "john@gmail.com", UserRole.CLIENT));
-        userService.registerNewUser(new UserRegisterDTO("1111111", "admin",
+        userService.registerNewUser(new UserRegisterDTO("1111111", "password",
                 "admin", "admin@admin.com", UserRole.ADMIN));
         userService.registerNewUser(
                 new UserRegisterDTO("2222222", "responsable", "responsable",
