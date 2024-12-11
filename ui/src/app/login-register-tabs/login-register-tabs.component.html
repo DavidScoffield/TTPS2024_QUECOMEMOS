@@ -67,7 +67,13 @@
           </label>
         </p>
         <div hlmCardFooter>
-          <button type="submit" hlmBtn [disabled]="loginForm.invalid">Ingresar</button>
+          <button type="submit" hlmBtn [disabled]="loginForm.invalid || isLoadingLogin">
+            @if (isLoadingLogin) {
+            <hlm-icon name="lucideLoaderCircle" size="sm" class="mr-2 animate-spin" /> Aguarde ...
+            } @else {
+            Ingresar
+            }
+          </button>
         </div>
       </form>
     </section>
@@ -213,7 +219,13 @@
         </label>
 
         <div hlmCardFooter>
-          <button hlmBtn [disabled]="registerForm.invalid">Registrarse</button>
+          <button type="submit" hlmBtn [disabled]="registerForm.invalid || isLoadingRegister">
+            @if (isLoadingRegister) {
+            <hlm-icon name="lucideLoaderCircle" size="sm" class="mr-2 animate-spin" /> Aguarde ...
+            } @else {
+            Registrarse
+            }
+          </button>
         </div>
 
       </form>

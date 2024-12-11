@@ -6,8 +6,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms'
+import { Router } from '@angular/router'
 import { provideIcons } from '@ng-icons/core'
-import { lucideChevronDown, lucideChevronUp, lucideEye } from '@ng-icons/lucide'
+import { lucideEye, lucideLoaderCircle } from '@ng-icons/lucide'
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm'
 import {
   HlmCardContentDirective,
@@ -31,7 +32,6 @@ import { toast } from 'ngx-sonner'
 import { HlmIconComponent } from '../../../libs/ui/ui-icon-helm/src/lib/hlm-icon.component'
 import { CustomError } from '../error/CustomError'
 import { UserService } from '../services/user.service'
-import { Router } from '@angular/router'
 
 @Component({
   selector: 'login-register-tabs',
@@ -57,9 +57,8 @@ import { Router } from '@angular/router'
   ],
   providers: [
     provideIcons({
-      lucideChevronUp,
-      lucideChevronDown,
       lucideEye,
+      lucideLoaderCircle,
     }),
   ],
   host: {
@@ -71,6 +70,9 @@ export class LoginRegisterTabs {
   @ViewChild('loginButton') loginButtonComponent!: ElementRef<HTMLButtonElement>
   @ViewChild('registerButton')
   registerButtonComponent!: ElementRef<HTMLButtonElement>
+
+  isLoadingLogin = false
+  isLoadingRegister = false
 
   loginForm: FormGroup
   registerForm: FormGroup
@@ -117,11 +119,14 @@ export class LoginRegisterTabs {
 
     const { dni, password } = this.loginForm.value
 
+    this.isLoadingLogin = true
+
     this.userService.login({ dni, password }).subscribe({
       next: (response) => {
         toast.success('Usuario logueado', {
           description: 'Bienvenido de nuevo.',
         })
+
         this.resetForm(this.loginForm)
         this.router.navigate(['/menus'])
       },
@@ -132,6 +137,9 @@ export class LoginRegisterTabs {
           description: error.message,
         })
       },
+      complete: () => {
+        this.isLoadingLogin = false
+      },
     })
   }
 
@@ -140,6 +148,8 @@ export class LoginRegisterTabs {
       console.log('Formulario de registro inválido')
     }
     const { dni, email, password, role, name } = this.registerForm.value
+
+    this.isLoadingRegister = true
 
     this.userService
       .register({ dni, email, password, roleSelected: role, name })
@@ -159,6 +169,9 @@ export class LoginRegisterTabs {
           toast.error('Error en el registro', {
             description: error.message,
           })
+        },
+        complete: () => {
+          this.isLoadingRegister = false
         },
       })
   }
