@@ -1,1 +1,26 @@
-<p class="text-red-600">navbar works!</p>
+@if (showNavbar) {
+<hlm-menu-bar class="w-fill border-0 dark flex justify-between py-3 h-12">
+  <p class="px-3 font-bold">🍴 QUECOMEMOS</p>
+  <div class="flex">
+    <a routerLink="/menus" hlmBtn [variant]="'link'" class="px-3 font-bold cursor-pointer">Menus</a>
+    <a routerLink="/comidas" hlmBtn [variant]="'link'" class="px-3 font-bold cursor-pointer">Comidas</a>
+
+
+  </div>
+  <button hlmMenuBarItem [brnMenuTriggerFor]="account" hlmBtn variant="outline"
+    class="px-3 font-medium cursor-pointer ml-auto">Cuenta</button>
+</hlm-menu-bar>
+
+
+<ng-template #account>
+  <hlm-menu variant="menubar" class="w-48">
+    <hlm-menu-group>
+      <button disabled inset hlmMenuItem class="font-semibold">Hola, {{name}} !!</button>
+
+      <hlm-menu-separator />
+
+      <button inset hlmMenuItem class="cursor-pointer" (click)="logout()">Cerrar Sesión</button>
+    </hlm-menu-group>
+  </hlm-menu>
+</ng-template>
+}
