@@ -6,7 +6,7 @@
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "mainClass": "com.ttps.quecomemos.QuecomemosApplication",
-      "projectName": "TTPS2024_QUECOMEMOS",
+      "projectName": "quecomemos",
       "args": "",
       "envFile": "${workspaceFolder}/.env"
     }
