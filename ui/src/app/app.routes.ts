@@ -9,4 +9,5 @@ export const routes: Routes = [
   { path: 'menus', component: MenuListComponent, canActivate: [AuthGuard] }, // Ruta protegida
   { path: 'menu/new', component: MenuFormComponent, canActivate: [AuthGuard] }, // Ruta protegida
   { path: 'menu/:id', component: MenuFormComponent, canActivate: [AuthGuard] }, // Ruta protegida
+  { path: '**', redirectTo: 'menus' },
 ]
