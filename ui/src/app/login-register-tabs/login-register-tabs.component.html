@@ -42,8 +42,15 @@
           </label>
           <label class="block my-4" hlmLabel>
             Contraseña
-            <input class="mt-1.5 w-full" formControlName="password" hlmInput type="password"
+
+
+            <input #passwordInput class="mt-1.5 w-full" formControlName="password" hlmInput type="password"
               placeholder="Ingrese su contraseña" />
+
+            <button type="button" (click)="showPassword(passwordInput)">
+              <hlm-icon [size]="'sm'" name="lucideEye"
+                class="absolute top-[30px] right-3 cursor-pointer hover:text-slate-300 rounded" />
+            </button>
 
             @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
             <small>

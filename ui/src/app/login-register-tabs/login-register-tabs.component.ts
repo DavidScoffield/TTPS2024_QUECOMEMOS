@@ -161,4 +161,8 @@ export class LoginRegisterTabs {
       }
     }
   }
+
+  public showPassword(input: HTMLInputElement) {
+    input.type = input.type === 'password' ? 'text' : 'password'
+  }
 }
