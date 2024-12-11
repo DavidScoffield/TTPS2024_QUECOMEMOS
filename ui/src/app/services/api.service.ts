@@ -2,11 +2,13 @@ import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
+  HttpResponse,
 } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable, throwError } from 'rxjs'
-import { catchError } from 'rxjs/operators'
+import { catchError, tap } from 'rxjs/operators'
 import { CustomError } from '../error/CustomError'
+import { AuthService } from './auth-service.service'
 
 // URL base de la API
 const API_URL = 'http://localhost:8080/api/'
@@ -15,7 +17,7 @@ const API_URL = 'http://localhost:8080/api/'
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   /**
    * Método para realizar solicitudes POST.
@@ -23,10 +25,11 @@ export class ApiService {
    * @param body Los datos que se enviarán.
    * @returns Observable con la respuesta.
    */
-  post<T>(endpoint: string, body: any): Observable<T> {
+  post<T>(endpoint: string, body: any): Observable<HttpResponse<T>> {
     return this.http
       .post<T>(`${API_URL}${endpoint}`, body, {
         headers: this.getHeaders(),
+        observe: 'response',
       })
       .pipe(catchError(this.handleError))
   }
@@ -36,9 +39,12 @@ export class ApiService {
    * @param endpoint El endpoint al que enviar la solicitud.
    * @returns Observable con la respuesta.
    */
-  get<T>(endpoint: string): Observable<T> {
+  get<T>(endpoint: string): Observable<HttpResponse<T>> {
     return this.http
-      .get<T>(`${API_URL}${endpoint}`, { headers: this.getHeaders() })
+      .get<T>(`${API_URL}${endpoint}`, {
+        headers: this.getHeaders(),
+        observe: 'response',
+      })
       .pipe(catchError(this.handleError))
   }
 
@@ -69,7 +75,7 @@ export class ApiService {
   private getHeaders() {
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      // 'Authorization': 'Bearer ' + token // Para agregar el token
+      Authorization: this.authService.getToken() || '',
     })
   }
 }

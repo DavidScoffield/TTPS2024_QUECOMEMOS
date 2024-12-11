@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators'
 import { Router } from '@angular/router'
 import { AuthService } from '../services/auth-service.service'
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TokenInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService, private router: Router) {}
 
