@@ -108,6 +108,7 @@ public class UserController {
                 "User logged in successfully", HttpStatus.OK);
 
         return ResponseEntity.ok().header("Authorization", "Bearer " + token)
+                .header("Access-Control-Expose-Headers", "Authorization")
                 .body(response);
 
     }
