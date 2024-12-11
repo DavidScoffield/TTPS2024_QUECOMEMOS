@@ -11,6 +11,11 @@ export interface RegisterData {
   name: string
 }
 
+export interface LoginData {
+  dni: string
+  password: string
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -28,5 +33,17 @@ export class UserService {
     const endpoint = this.subpath + '/register'
 
     return this.apiService.post<any>(endpoint, registerData)
+  }
+
+  /**
+   * Método para loguear un usuario.
+   * @param loginData Datos del usuario a loguear.
+   * @returns Observable con la respuesta del backend.
+   */
+
+  login(loginData: LoginData): Observable<any> {
+    const endpoint = this.subpath + '/login'
+
+    return this.apiService.post<any>(endpoint, loginData)
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, ElementRef, ViewChild } from '@angular/core'
 import {
   AbstractControl,
   FormBuilder,
@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms'
 import { provideIcons } from '@ng-icons/core'
-import { lucideChevronDown, lucideChevronUp } from '@ng-icons/lucide'
+import { lucideChevronDown, lucideChevronUp, lucideEye } from '@ng-icons/lucide'
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm'
 import {
   HlmCardContentDirective,
@@ -19,6 +19,7 @@ import {
 } from '@spartan-ng/ui-card-helm'
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm'
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm'
+import { BrnSelectImports } from '@spartan-ng/ui-select-brain'
 import { HlmSelectImports } from '@spartan-ng/ui-select-helm'
 import {
   HlmTabsComponent,
@@ -26,11 +27,11 @@ import {
   HlmTabsListComponent,
   HlmTabsTriggerDirective,
 } from '@spartan-ng/ui-tabs-helm'
+import { toast } from 'ngx-sonner'
+import { HlmIconComponent } from '../../../libs/ui/ui-icon-helm/src/lib/hlm-icon.component'
 import { CustomError } from '../error/CustomError'
 import { UserService } from '../services/user.service'
-import { toast } from 'ngx-sonner'
-import { BrnSelectImports } from '@spartan-ng/ui-select-brain'
-import { HlmToasterComponent } from '@spartan-ng/ui-sonner-helm'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'login-register-tabs',
@@ -40,44 +41,45 @@ import { HlmToasterComponent } from '@spartan-ng/ui-sonner-helm'
     HlmTabsListComponent,
     HlmTabsTriggerDirective,
     HlmTabsContentDirective,
-
     HlmCardContentDirective,
     HlmCardDescriptionDirective,
     HlmCardDirective,
     HlmCardFooterDirective,
     HlmCardHeaderDirective,
     HlmCardTitleDirective,
-
     HlmLabelDirective,
     HlmInputDirective,
     HlmButtonDirective,
-
     BrnSelectImports,
     HlmSelectImports,
-
     ReactiveFormsModule,
+    HlmIconComponent,
   ],
-  providers: [provideIcons({ lucideChevronUp, lucideChevronDown })],
+  providers: [
+    provideIcons({
+      lucideChevronUp,
+      lucideChevronDown,
+      lucideEye,
+    }),
+  ],
   host: {
     class: 'block w-full max-w-lg mx-auto mt-10 mb-10',
   },
   templateUrl: './login-register-tabs.component.html',
 })
 export class LoginRegisterTabs {
-  showToast() {
-    console.log('toastr')
-    toast('Event has been created', {
-      description: 'Sunday, December 03, 2024 at 9:00 AM',
-      action: {
-        label: 'Undo',
-        onClick: () => console.log('Undo'),
-      },
-    })
-  }
+  @ViewChild('loginButton') loginButtonComponent!: ElementRef<HTMLButtonElement>
+  @ViewChild('registerButton')
+  registerButtonComponent!: ElementRef<HTMLButtonElement>
+
   loginForm: FormGroup
   registerForm: FormGroup
 
-  constructor(private fb: FormBuilder, private registerService: UserService) {
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       dni: [
         '',
@@ -89,18 +91,18 @@ export class LoginRegisterTabs {
     this.registerForm = this.fb.group(
       {
         dni: [
-          '1231231',
+          '',
           [
             Validators.required,
             Validators.minLength(7),
             Validators.maxLength(8),
           ],
         ],
-        password: ['password', [Validators.required, Validators.minLength(6)]],
-        confirmPassword: ['password', [Validators.required]],
-        email: ['1@gmail.com', [Validators.required, Validators.email]],
-        name: ['david', [Validators.required]],
-        role: ['CLIENT', [Validators.required]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+        name: ['', [Validators.required]],
+        role: ['', [Validators.required]],
       },
       {
         validators: [this.matchPasswords('password', 'confirmPassword')],
@@ -109,21 +111,40 @@ export class LoginRegisterTabs {
   }
 
   onLogin() {
-    if (this.loginForm.valid) {
-      console.log('Formulario de Login:', this.loginForm.value)
+    if (!this.loginForm.valid) {
+      console.log('Formulario de Login invalido', this.loginForm)
     }
+
+    const { dni, password } = this.loginForm.value
+
+    this.userService.login({ dni, password }).subscribe({
+      next: (response) => {
+        toast.success('Usuario logueado', {
+          description: 'Bienvenido de nuevo.',
+        })
+        this.resetForm(this.loginForm)
+        this.router.navigate(['/menus'])
+      },
+      error: (error: CustomError) => {
+        console.error('Error en el login:', error)
+
+        toast.error('Error en el login', {
+          description: error.message,
+        })
+      },
+    })
   }
 
   onRegister() {
     if (!this.registerForm.valid) {
-      console.log('Formulario inválido')
+      console.log('Formulario de registro inválido')
     }
     const { dni, email, password, role, name } = this.registerForm.value
 
-    this.registerService
+    this.userService
       .register({ dni, email, password, roleSelected: role, name })
       .subscribe({
-        next: (response) => {
+        next: () => {
           toast.success('Usuario registrado', {
             description: 'Ya puedes iniciar sesión con tu cuenta.',
           })
