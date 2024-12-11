@@ -18,39 +18,41 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "user_id")
-  @NotNull
-  private Long id;
 
-  @Column(unique = true)
-  @NotNull
-  private String dni;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    @NotNull
+    private Long id;
 
-  @NotNull
-  private String password;
+    @Column(unique = true)
+    @NotNull
+    private String dni;
 
-  @NotNull
-  private String name;
+    @NotNull
+    private String password;
 
-  @NotNull
-  private String email;
+    @NotNull
+    private String name;
 
-  @NotNull
-  private String role;
+    @NotNull
+    private String email;
 
-  public User(String dni, String name, String email, String password, String role) {
-    this.dni = dni;
-    this.password = password;
-    this.name = name;
-    this.email = email;
-    this.role = role;
-  }
+    @NotNull
+    private String role;
 
-  @Override
-  public String toString() {
-    return "User{name='" + name + "', dni='" + dni + "'}";
-  }
+    public User(String dni, String name, String email, String password,
+            String role) {
+        this.dni = dni;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{name='" + name + "', dni='" + dni + "'}";
+    }
 
 }

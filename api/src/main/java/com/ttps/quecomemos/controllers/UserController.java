@@ -20,6 +20,7 @@ import com.ttps.quecomemos.dto.UserWithoutPasswordDTO;
 import com.ttps.quecomemos.handlers.GenericExceptionHandler;
 import com.ttps.quecomemos.model.Client;
 import com.ttps.quecomemos.model.User;
+import com.ttps.quecomemos.services.JwtService;
 import com.ttps.quecomemos.services.UserService;
 import com.ttps.quecomemos.util.ApiResponseDTO;
 import com.ttps.quecomemos.util.UserUtils;
@@ -44,6 +45,9 @@ public class UserController {
     @Autowired
     private GenericExceptionHandler exceptionHandler;
 
+    @Autowired
+    private JwtService jwtService;
+
     /**
      * Handles the registration of a new user.
      *
@@ -59,17 +63,18 @@ public class UserController {
         @ApiResponse(responseCode = "201", description = "User registered successfully"),
         @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
         @ApiResponse(responseCode = "409", description = "User already exists", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
-    })
-    public ResponseEntity<ApiResponseDTO<UserWithoutPasswordDTO>> registerUser(@RequestBody UserRegisterDTO userRegisterDTO) {
+        @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)})
+    public ResponseEntity<ApiResponseDTO<UserWithoutPasswordDTO>> registerUser(
+            @RequestBody UserRegisterDTO userRegisterDTO) {
         log.info("Registering user: {}", userRegisterDTO);
 
         // Validate data
         UserUtils.isRegistrationDataComplete(userRegisterDTO);
 
-        UserWithoutPasswordDTO newUser = userService.registerNewUser(userRegisterDTO);
-        ApiResponseDTO<UserWithoutPasswordDTO> response = new ApiResponseDTO<>(newUser,
-                "User registered successfully", HttpStatus.CREATED);
+        UserWithoutPasswordDTO newUser = userService
+                .registerNewUser(userRegisterDTO);
+        ApiResponseDTO<UserWithoutPasswordDTO> response = new ApiResponseDTO<>(
+                newUser, "User registered successfully", HttpStatus.CREATED);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -88,8 +93,7 @@ public class UserController {
         @ApiResponse(responseCode = "200", description = "User logged in successfully"),
         @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
         @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
-    })
+        @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)})
     public ResponseEntity<ApiResponseDTO<User>> login(@RequestBody LoginUserDTO loginUserDTO) {
         log.info("Logging in user: {}", loginUserDTO);
 
@@ -98,9 +102,13 @@ public class UserController {
 
         User loggedUser = userService.authenticateUser(loginUserDTO);
 
+        String token = jwtService.generateToken(loggedUser.getDni());
+
         ApiResponseDTO<User> response = new ApiResponseDTO<>(loggedUser,
                 "User logged in successfully", HttpStatus.OK);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        return ResponseEntity.ok().header("Authorization", "Bearer " + token)
+                .body(response);
 
     }
 
@@ -118,9 +126,9 @@ public class UserController {
         @ApiResponse(responseCode = "200", description = "User updated successfully"),
         @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
         @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
-    })
-    public ResponseEntity<ApiResponseDTO<Client>> updateClient(@PathVariable String dni, @RequestBody UpdateClientDTO updateClientDTO) {
+        @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)})
+    public ResponseEntity<ApiResponseDTO<UserWithoutPasswordDTO>> updateClient(
+            @PathVariable String dni, @RequestBody UpdateClientDTO updateClientDTO) {
         log.info("Updating client: {}", updateClientDTO, " with DNI: {}", dni);
 
         // Validate data
@@ -129,8 +137,14 @@ public class UserController {
         // Update user
         Client updatedUser = userService.updateClient(dni, updateClientDTO);
 
-        ApiResponseDTO<Client> response = new ApiResponseDTO<>(updatedUser,
-                "Client updated successfully", HttpStatus.OK);
+        UserWithoutPasswordDTO userWithoutPasswordDTO = new UserWithoutPasswordDTO(
+                updatedUser.getId(), updatedUser.getDni(),
+                updatedUser.getName(), updatedUser.getEmail(),
+                updatedUser.getRole());
+
+        ApiResponseDTO<UserWithoutPasswordDTO> response = new ApiResponseDTO<>(
+                userWithoutPasswordDTO, "Client updated successfully",
+                HttpStatus.OK);
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
@@ -139,8 +153,8 @@ public class UserController {
     public ResponseEntity<ApiResponseDTO<Void>> handleHttpMessageNotReadable(
             HttpMessageNotReadableException e) {
         log.error("Invalid Data Input provided: {}", e.getMessage());
-        ApiResponseDTO<Void> response = new ApiResponseDTO<>(null, e.getMessage(),
-                HttpStatus.BAD_REQUEST);
+        ApiResponseDTO<Void> response = new ApiResponseDTO<>(null,
+                e.getMessage(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
