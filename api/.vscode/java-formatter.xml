@@ -1042,7 +1042,8 @@
         <setting
             id="org.eclipse.jdt.core.formatter.blank_lines_between_import_groups" value="1" />
         <setting
-            id="org.eclipse.jdt.core.formatter.lineSplit" value="80" />
+            id="org.eclipse.jdt.core.formatter.lineSplit" value="90" />
+        id="org.eclipse.jdt.core.formatter.lineSplit" value="80" />
         id="org.eclipse.jdt.core.formatter.lineSplit" value="110" />
         id="org.eclipse.jdt.core.formatter.lineSplit" value="120" />
         id="org.eclipse.jdt.core.formatter.lineSplit" value="100" />
