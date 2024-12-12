@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter implements Filter {
   private JwtService jwtService;
 
   private static final String[] PUBLIC_ENDPOINTS = { "/api/users/login",
-      "/api/users/register", "/initialize-data" };
+      "/api/users/register", "/initialize-data", "/send-email" };
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response,
