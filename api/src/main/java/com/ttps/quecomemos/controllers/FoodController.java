@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ttps.quecomemos.dto.ApiResponseDTO;
 import com.ttps.quecomemos.dto.FoodRegisterDTO;
 import com.ttps.quecomemos.model.Food;
 import com.ttps.quecomemos.services.FoodService;
-import com.ttps.quecomemos.util.ApiResponseDTO;
 import com.ttps.quecomemos.util.FoodUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,8 +52,7 @@ public class FoodController {
       @ApiResponse(responseCode = "201", description = "Food registered successfully"),
       @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
       @ApiResponse(responseCode = "409", description = "Food already exists", content = @Content),
-      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
-  })
+      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content) })
   public ResponseEntity<ApiResponseDTO<Food>> registerFood(@RequestBody
   FoodRegisterDTO foodRegisterDTO) {
     log.info("Registering food: {}", foodRegisterDTO);
@@ -80,8 +79,7 @@ public class FoodController {
   @Operation(summary = "List all foods", description = "Retrieves a list of all foods in the system")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Foods retrieved successfully"),
-      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
-  })
+      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content) })
   public ResponseEntity<ApiResponseDTO<List<Food>>> getAllFoods() {
     log.info("Listing all foods");
 
@@ -105,8 +103,7 @@ public class FoodController {
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Food updated successfully"),
       @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
-      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
-  })
+      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content) })
   public ResponseEntity<ApiResponseDTO<Food>> updateFood(@PathVariable
   Long id, @RequestBody
   FoodRegisterDTO updateFoodDTO) {

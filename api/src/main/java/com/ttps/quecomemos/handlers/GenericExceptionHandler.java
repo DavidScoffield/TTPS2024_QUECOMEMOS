@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import com.ttps.quecomemos.dto.ApiResponseDTO;
 import com.ttps.quecomemos.errors.ValidationDataException;
-import com.ttps.quecomemos.util.ApiResponseDTO;
 
 import lombok.extern.slf4j.Slf4j;
 

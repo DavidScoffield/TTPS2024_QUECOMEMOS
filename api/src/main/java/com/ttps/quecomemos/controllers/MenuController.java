@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ttps.quecomemos.dto.ApiResponseDTO;
 import com.ttps.quecomemos.dto.MenuRegisterDTO;
 import com.ttps.quecomemos.model.Menu;
 import com.ttps.quecomemos.services.MenuService;
-import com.ttps.quecomemos.util.ApiResponseDTO;
 import com.ttps.quecomemos.util.MenuUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,8 +49,7 @@ public class MenuController {
       @ApiResponse(responseCode = "201", description = "Menu registered successfully"),
       @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
       @ApiResponse(responseCode = "409", description = "Menu already exists", content = @Content),
-      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
-  })
+      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content) })
   public ResponseEntity<ApiResponseDTO<Menu>> registerMenu(@RequestBody
   MenuRegisterDTO menuRegisterDTO) {
     log.info("Registering menu: {}", menuRegisterDTO);
@@ -73,8 +72,7 @@ public class MenuController {
   @Operation(summary = "List all menus", description = "Retrieves a list of all menus in the system")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Menus retrieved successfully"),
-      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
-  })
+      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content) })
   public ResponseEntity<ApiResponseDTO<List<Menu>>> getAllMenus() {
     log.info("Listing all menus");
 
@@ -97,8 +95,7 @@ public class MenuController {
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Menu updated successfully"),
       @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
-      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content)
-  })
+      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content) })
   public ResponseEntity<ApiResponseDTO<Menu>> updateMenu(@PathVariable
   Long id, @RequestBody
   MenuRegisterDTO updateMenuDTO) {

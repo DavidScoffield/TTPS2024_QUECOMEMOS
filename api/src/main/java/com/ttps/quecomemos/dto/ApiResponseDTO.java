@@ -1,4 +1,4 @@
-package com.ttps.quecomemos.util;
+package com.ttps.quecomemos.dto;
 
 import org.springframework.http.HttpStatus;
 
