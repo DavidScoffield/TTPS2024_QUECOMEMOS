@@ -18,6 +18,7 @@ import com.ttps.quecomemos.model.ShoppingCart;
 import com.ttps.quecomemos.model.User;
 import com.ttps.quecomemos.repository.ClientRepository;
 import com.ttps.quecomemos.repository.UserRepository;
+import com.ttps.quecomemos.util.PasswordUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -70,6 +71,10 @@ public class UserService {
       throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
     }
 
+    // Hash password
+    String hashedPassword = PasswordUtil.hashPassword(userRegisterDTO.getPassword());
+    userRegisterDTO.setPassword(hashedPassword);
+
     if (userRegisterDTO.getRoleSelected() == UserRole.CLIENT) {
       Client newClient = new Client(userRegisterDTO.getDni(), userRegisterDTO.getName(),
           userRegisterDTO.getEmail(), userRegisterDTO.getPassword(),
@@ -105,14 +110,28 @@ public class UserService {
     }
   }
 
-  public User authenticateUser(LoginUserDTO loginUserDTO) {
+  public UserWithoutPasswordDTO authenticateUser(LoginUserDTO loginUserDTO) {
     User existingUser = userRepository.findByDni(loginUserDTO.getDni());
-    if (existingUser == null
-        || !existingUser.getPassword().equals(loginUserDTO.getPassword())) {
+
+    if (existingUser == null || !PasswordUtil.matchesPassword(loginUserDTO.getPassword(),
+        existingUser.getPassword())) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
     }
 
-    return existingUser;
+    UserWithoutPasswordDTO user;
+
+    if (existingUser.getRole().equals(UserRole.CLIENT.toString())) {
+      Client client = (Client) existingUser;
+      user = new ClientWithoutPasswordDTO(client.getId(), client.getDni(),
+          client.getName(), client.getEmail(), client.getRole(), client.getPhoto(),
+          client.getCart());
+    } else {
+      user = new UserWithoutPasswordDTO(existingUser.getId(), existingUser.getDni(),
+          existingUser.getName(), existingUser.getEmail(), existingUser.getRole());
+    }
+
+    return user;
+
   }
 
   public Client updateClient(String dniOfClient, UpdateClientDTO updateClientDTO) {
