@@ -50,7 +50,7 @@ export class MenuFormComponent implements OnInit {
     this.menuForm = this.fb.group({
       name: ['', Validators.required],
       picture: [''],
-      price: ['', [Validators.required, Validators.min(0)]], 
+      price: ['', [Validators.required, Validators.min(0)]],
       foods: this.fb.array([]),
     });
   }

@@ -1,45 +1,47 @@
 <section hlmCard class="mt-4 w-full dark flex flex-col justify-center items-center">
-  @if (!showForm) {
-    <!-- Sección de Lista -->
-    <div hlmCardHeader>
-      <h1 hlmCardTitle>Menús Disponibles</h1>
-      <button hlmBtn class="mt-2" (click)="openForm()">Agregar Menú</button>
-    </div>
+  <!-- Sección de Lista -->
+  <div hlmCardHeader>
+    <h1 hlmCardTitle>Menús Disponibles</h1>
+    <button hlmBtn class="mt-2" (click)="openForm()">Agregar Menú</button>
+  </div>
 
-    <div hlmCardContent class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      @if (menus) {
-        <ng-container>
-          @for (menu of menus; track menu.id) {
-            <div class="p-4 border rounded-md mb-4">
-              <h4 class="font-bold">{{ menu.name }}</h4>
-              <p><strong>Precio:</strong> {{ menu.price }}</p>
-              <p><strong>Imagen:</strong> {{ menu.picture }}</p>
+  <div hlmCardContent class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    @if (menus) {
+      <ng-container>
+        @for (menu of menus; track menu.id) {
+          <div class="p-4 border rounded-md mb-4">
+            <h4 class="font-bold">{{ menu.name }}</h4>
+            <p><strong>Precio:</strong> {{ menu.price }}</p>
+            <p><strong>Imagen:</strong> {{ menu.picture }}</p>
 
-              <brn-separator hlmSeparator></brn-separator>
-              <h5 class="mt-2">Comidas:</h5>
-              <ul>
-                @for (food of menu.foods; track food.id) {
-                  <li>
-                    {{ food.name }} - {{ food.type }} - {{ food.isVegetarian ? 'Vegetariano' : 'No Vegetariano' }}
-                  </li>
-                }
-              </ul>
+            <brn-separator hlmSeparator></brn-separator>
+            <h5 class="mt-2">Comidas:</h5>
+            <ul>
+              @for (food of menu.foods; track food.id) {
+                <li>
+                  {{ food.name }}
+                </li>
+              }
+            </ul>
 
-              <div class="mt-2 flex gap-2">
-                <button hlmBtn variant="secondary" (click)="openForm(menu.id)">Editar</button>
-                <button hlmBtn variant="destructive" (click)="deleteMenu(menu.id!)">Eliminar</button>
-              </div>
+            <div class="mt-2 flex gap-2">
+              <button hlmBtn variant="secondary" (click)="openForm(menu.id)">Editar</button>
+              <button hlmBtn variant="destructive" (click)="deleteMenu(menu.id!)">Eliminar</button>
             </div>
-          }
-        </ng-container>
+          </div>
+        }
+      </ng-container>
       } @else {
         <ng-template>
           <p class="text-center text-gray-500">No hay menús disponibles. Agrega uno para comenzar.</p>
         </ng-template>
       }
     </div>
-  } @else {
-    <!-- Formulario embebido -->
-    <app-menu-form [menuId]="selectedMenuId" (closeForm)="closeForm()"></app-menu-form>
-  }
+    @if (showForm) {
+      <div class="modal">
+        <app-menu-form [menuId]="selectedMenuId" (closeForm)="closeForm()"></app-menu-form>
+      </div>
+      <!-- Formulario embebido -->
+    
+    }
 </section>

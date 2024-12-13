@@ -1,73 +1,79 @@
-<section hlmCard class="w-full dark max-w-2xl mx-auto p-4">
-  <div hlmCardHeader>
+<section hlmCard class="w-full dark max-w-2xl mx-auto p-4 h-screen flex flex-col">
+  <!-- Encabezado del formulario -->
+  <div hlmCardHeader class="flex-shrink-0">
     <h2 hlmCardTitle>{{ isEditMode ? 'Editar' : 'Crear' }} Menú</h2>
     <p hlmCardDescription>
       Completa los detalles del menú y las comidas para guardarlo.
     </p>
   </div>
 
-  <form [formGroup]="menuForm" (ngSubmit)="onSubmit()">
-    <p hlmCardContent class="pb-0">
-      <!-- Campo de Nombre -->
-      <label class="block my-4" hlmLabel>
-        Nombre
-        <input class="mt-1.5 w-full" id="name" formControlName="name" hlmInput required placeholder="Ingrese el nombre del menú" />
-        @if (menuForm.get('name')?.invalid && menuForm.get('name')?.touched) {
-          <small>El nombre es obligatorio.</small>
+  <!-- Contenedor scrollable para el contenido del formulario -->
+  <div class="flex-grow overflow-y-auto">
+    <form [formGroup]="menuForm" (ngSubmit)="onSubmit()">
+      <p hlmCardContent class="pb-0">
+        <!-- Campo de Nombre -->
+        <label class="block my-4" hlmLabel>
+          Nombre
+          <input class="mt-1.5 w-full" id="name" formControlName="name" hlmInput required placeholder="Ingrese el nombre del menú"/>
+          @if (menuForm.get('name')?.invalid && menuForm.get('name')?.touched) {
+            <small>El nombre es obligatorio.</small>
+          }
+        </label>
+
+        <!-- Campo de Precio del Menú -->
+        <label class="block my-4" hlmLabel>
+          Precio
+          <input class="mt-1.5 w-full" id="price" formControlName="price" hlmInput type="number" required placeholder="Ingrese el precio del menú"/>
+          @if (menuForm.get('price')?.invalid && menuForm.get('price')?.touched) {
+            <small>El precio es obligatorio.</small>
+          }
+        </label>
+
+        <!-- Campo de Imagen -->
+        <label class="block my-4" hlmLabel>
+          Imagen
+          <textarea class="mt-1.5 w-full" id="picture" formControlName="picture" hlmInput placeholder="Ingrese la imagen"
+          ></textarea>
+        </label>
+      </p>
+
+      <h3 class="text-lg font-semibold mb-2">Comidas</h3>
+      <div class="space-y-4">
+        @for (food of foods.controls; track $index) {
+          <div [formGroup]="food" hlmCard class="p-4">
+            <label class="block my-4" hlmLabel>
+              Seleccionar comida
+              <select class="mt-1.5 w-full" formControlName="foodId" hlmInput required>
+                <option value="1">comida 1</option>
+                <option value="2">comida 2</option>
+              </select>
+              @if (menuForm.get('food')?.invalid && menuForm.get('food')?.touched) {
+                <small>
+                  Seleccionar al menos una comida.
+                </small>
+              }
+            </label>
+
+            <!-- Botón para eliminar comida -->
+            <button type="button" hlmBtn variant="destructive" (click)="removeFood($index)">
+              Eliminar Comida
+            </button>
+          </div>
         }
-      </label>
+      </div>
 
-      <!-- Campo de Precio del Menú -->
-      <label class="block my-4" hlmLabel>
-        Precio
-        <input class="mt-1.5 w-full" id="price" formControlName="price" hlmInput type="number" required placeholder="Ingrese el precio del menú" />
-        @if (menuForm.get('price')?.invalid && menuForm.get('price')?.touched) {
-          <small>El precio es obligatorio.</small>
-        }
-      </label>
+      <!-- Botón para agregar comida -->
+      <div class="mt-4">
+        <button type="button" hlmBtn variant="outline" (click)="addFood()">Agregar Comida</button>
+      </div>
+    </form>
+  </div>
 
-      <!-- Campo de Imagen -->
-      <label class="block my-4" hlmLabel>
-        Imagen
-        <textarea class="mt-1.5 w-full" id="picture" formControlName="picture" hlmInput placeholder="Ingrese la imagen"></textarea>
-      </label>
-    </p>
-
-    <h3 class="text-lg font-semibold mb-2">Comidas</h3>
-    <div class="space-y-4">
-      @for (food of foods.controls; track $index) {
-        <div [formGroup]="food" hlmCard class="p-4">
-          <hlm-select formControlName="foodId" class="inline-block" placeholder="Selecciona una comida">
-            <hlm-select-trigger>
-              <hlm-select-value />
-            </hlm-select-trigger>
-            <hlm-select-content class="w-56">
-                <hlm-option value="Refresh">Refresh</hlm-option>
-                <hlm-option value="Settings">Settings</hlm-option>
-                <hlm-option value="Help">Help</hlm-option>
-                <hlm-option value="Signout">Sign out</hlm-option>
-            </hlm-select-content>
-          </hlm-select>
-
-          <!-- Botón para eliminar comida -->
-          <button type="button" hlmBtn variant="destructive" (click)="removeFood($index)">
-            Eliminar Comida
-          </button>
-        </div>
-      }
-    </div>
-
-    <!-- Botón para agregar comida -->
-    <div class="mt-4">
-      <button type="button" hlmBtn variant="outline" (click)="addFood()">Agregar Comida</button>
-    </div>
-
-    <!-- Botones para guardar o cancelar -->
-    <div hlmCardFooter class="flex justify-between">
-      <button type="button" hlmBtn variant="secondary" (click)="onCancel()">Cancelar</button>
-      <button type="submit" hlmBtn [disabled]="!menuForm.valid">
-        Guardar Menú
-      </button>
-    </div>
-  </form>
+  <!-- Botones de pie de página -->
+  <div hlmCardFooter class="flex-shrink-0 flex justify-between mt-4">
+    <button type="button" hlmBtn variant="secondary" (click)="onCancel()">Cancelar</button>
+    <button type="submit" hlmBtn [disabled]="!menuForm.valid">
+      Guardar Menú
+    </button>
+  </div>
 </section>
