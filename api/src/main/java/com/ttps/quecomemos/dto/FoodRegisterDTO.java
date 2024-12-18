@@ -14,5 +14,11 @@ public class FoodRegisterDTO {
 
   @NotNull
   private Boolean isVegetarian;
+  
+  public FoodRegisterDTO(String name, String type, Boolean isVegetarian) {
+	  this.name= name;
+	  this.isVegetarian = isVegetarian;
+	  this.type= type;
+  }
 
 }

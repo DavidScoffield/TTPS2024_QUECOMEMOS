@@ -27,6 +27,18 @@ public class MenuService {
   @Autowired
   private FoodRepository foodRepository;
 
+  public Menu getMenuById(Long id) {
+      return menuRepository.findById(id).orElse(null);
+  }
+  
+  public boolean deleteMenuById(Long id) {
+      if (menuRepository.existsById(id)) {
+          menuRepository.deleteById(id);
+          return true;
+      }
+      return false;
+  }
+  
   public Menu findMenuByName(String name) {
     return menuRepository.findByName(name);
   }

@@ -34,6 +34,24 @@ export class ApiService {
       .pipe(catchError(this.handleError))
   }
 
+  put<T>(endpoint: string, body: any): Observable<HttpResponse<T>> {
+    return this.http
+      .put<T>(`${API_URL}${endpoint}`, body, {
+        headers: this.getHeaders(),
+        observe: 'response',
+      })
+      .pipe(catchError(this.handleError))
+  }
+
+  delete<T>(endpoint: string): Observable<HttpResponse<T>> {
+    return this.http
+      .delete<T>(`${API_URL}${endpoint}`, {
+        headers: this.getHeaders(),
+        observe: 'response',
+      })
+      .pipe(catchError(this.handleError))
+  }
+
   /**
    * Método para realizar solicitudes GET.
    * @param endpoint El endpoint al que enviar la solicitud.

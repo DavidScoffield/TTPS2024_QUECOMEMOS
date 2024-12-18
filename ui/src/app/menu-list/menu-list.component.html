@@ -6,7 +6,7 @@
   </div>
 
   <div hlmCardContent class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    @if (menus) {
+    @if (menus.length>0) {
       <ng-container>
         @for (menu of menus; track menu.id) {
           <div class="p-4 border rounded-md mb-4">
@@ -19,7 +19,7 @@
             <ul>
               @for (food of menu.foods; track food.id) {
                 <li>
-                  {{ food.name }}
+                  {{food.name}}
                 </li>
               }
             </ul>
@@ -32,14 +32,14 @@
         }
       </ng-container>
       } @else {
-        <ng-template>
+        <ng-container>
           <p class="text-center text-gray-500">No hay menús disponibles. Agrega uno para comenzar.</p>
-        </ng-template>
+        </ng-container>
       }
     </div>
     @if (showForm) {
       <div class="modal">
-        <app-menu-form [menuId]="selectedMenuId" (closeForm)="closeForm()"></app-menu-form>
+        <app-menu-form [menuId]="selectedMenuId" (save)="saveMenu($event)" (closeForm)="closeForm()"></app-menu-form>
       </div>
       <!-- Formulario embebido -->
     

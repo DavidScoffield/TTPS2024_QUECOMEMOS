@@ -1,93 +1,82 @@
-// src/app/menu.service.ts
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { Menu } from '../models/menu.model'
-import { Food } from '../models/food.model'
+import { ApiService } from './api.service' // Asegúrate de tener el ApiService importado
+import { map } from 'rxjs/operators'
+import { ApiResponseDTO } from '../models/apiResponseDTO.model'
 
 @Injectable({
   providedIn: 'root',
 })
 export class MenuService {
-  private menus: Menu[] = []
-  private menusSubject = new BehaviorSubject<Menu[]>([])
+  private menusSubject = new BehaviorSubject<Menu[]>([]) // Utilizamos un BehaviorSubject para manejar los menús
+  private subpath = 'menus' // Ruta del endpoint en el backend
 
-  constructor() {
-    // Initialize with some sample data
-    this.addMenu({
-      name: 'Lunch Menu',
-      price: 10,
-      picture: 'https://via.placeholder.com/150',
-      foods: [
-        {
-          name: 'Burger',
-          isVegetarian: false,
-          type: 'Main',
-        },
-        {
-          name: 'Salad',
-          isVegetarian: true,
-          type: 'Side',
-        },
-      ],
-    })
-  }
+  constructor(private apiService: ApiService) {}
 
+  /**
+   * Obtiene todos los menús desde el backend.
+   */
   getMenus(): Observable<Menu[]> {
-    return this.menusSubject.asObservable()
+    return this.apiService.get<ApiResponseDTO<Menu[]>>(`${this.subpath}`).pipe(
+      map(response => {
+        if (!response.body||!response.body.data) {
+          throw new Error('Menu not found'); // Lanza error si no hay un menú
+        }
+        return response.body.data;
+      })
+    );
   }
 
-  getMenu(id: number): Menu | undefined {
-    return this.menus.find((menu) => menu.id === id)
+  /**
+   * Obtiene un menú específico por su ID.
+   */
+  getMenu(id: number): Observable<Menu> {
+    return this.apiService.get<ApiResponseDTO<Menu>>(`menus/${id}`).pipe(
+      map(response => {
+        if (!response.body||!response.body.data) {
+          throw new Error('Menu not found'); // Lanza error si no hay un menú
+        }
+        return response.body.data;
+      })
+    );
   }
 
-  addMenu(menu: Omit<Menu, 'id'>): void {
-    const newMenu: Menu = {
-      ...menu,
-      id: this.menus.length + 1,
-      foods: menu.foods.map((food, index) => ({ ...food, id: index + 1 })),
-    }
-    this.menus.push(newMenu)
-    this.menusSubject.next([...this.menus])
+  /**
+   * Agrega un nuevo menú.
+   */
+  addMenu(menu: Omit<Menu, 'id'>): Observable<Menu> {
+    return this.apiService.post<ApiResponseDTO<Menu>>(`${this.subpath}/register`, menu).pipe(
+      map(response => {
+        if (!response.body||!response.body.data) {
+          throw new Error('Menu not found'); // Lanza error si no hay un menú
+        }
+        return response.body.data;
+      })
+    );
   }
 
-  updateMenu(updatedMenu: Menu): void {
-    const index = this.menus.findIndex((menu) => menu.id === updatedMenu.id)
-    if (index !== -1) {
-      this.menus[index] = updatedMenu
-      this.menusSubject.next([...this.menus])
-    }
+  /**
+   * Actualiza un menú existente.
+   */
+  updateMenu(id: number, updatedMenu: Menu): Observable<Menu> {
+    return this.apiService.put<ApiResponseDTO<Menu>>(`${this.subpath}/update/${id}`, updatedMenu).pipe(
+      map(response => {
+        if (!response.body||!response.body.data) {
+          throw new Error('Menu not found'); // Lanza error si no hay un menú
+        }
+        return response.body.data;
+      })
+    );
   }
 
-  deleteMenu(id: number): void {
-    this.menus = this.menus.filter((menu) => menu.id !== id)
-    this.menusSubject.next([...this.menus])
-  }
-
-  addFood(menuId: number, food: Omit<Food, 'id'>): void {
-    const menu = this.menus.find((m) => m.id === menuId)
-    if (menu) {
-      const newFood: Food = { ...food, id: menu.foods.length + 1 }
-      menu.foods.push(newFood)
-      this.menusSubject.next([...this.menus])
-    }
-  }
-
-  updateFood(menuId: number, updatedFood: Food): void {
-    const menu = this.menus.find((m) => m.id === menuId)
-    if (menu) {
-      const index = menu.foods.findIndex((f) => f.id === updatedFood.id)
-      if (index !== -1) {
-        menu.foods[index] = updatedFood
-        this.menusSubject.next([...this.menus])
-      }
-    }
-  }
-
-  deleteFood(menuId: number, foodId: number): void {
-    const menu = this.menus.find((m) => m.id === menuId)
-    if (menu) {
-      menu.foods = menu.foods.filter((f) => f.id !== foodId)
-      this.menusSubject.next([...this.menus])
-    }
+  /**
+   * Elimina un menú por su ID.
+   */
+  deleteMenu(id: number): Observable<void|null> {
+    return this.apiService.delete<void>(`${this.subpath}/${id}`).pipe(
+      map(response => response.body) // Extrae solo el cuerpo de la respuesta (aunque sea vacío)
+    )
   }
 }
+

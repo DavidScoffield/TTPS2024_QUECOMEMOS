@@ -21,6 +21,8 @@ import { HlmCardContentDirective,
   import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
   //import { BrnSelectImports } from '@spartan-ng/brain/select';
   import { HlmSelectImports } from '@spartan-ng/ui-select-helm';
+import { FoodService } from '../services/food.service'
+import { Menu } from '../models/menu.model'
 
 @Component({
   selector: 'app-menu-form',
@@ -36,14 +38,16 @@ import { HlmCardContentDirective,
 })
 export class MenuFormComponent implements OnInit {
   @Input() menuId?: number; // Recibe el ID del menú en caso de edición
-  @Output() closeForm = new EventEmitter<void>(); // Notifica al componente padre cuando se cierra el formulario
-
+  @Output() save = new EventEmitter<Menu>();
+  @Output() closeForm = new EventEmitter(); 
+  foodsLoaded:Food[] = []
   menuForm: FormGroup;
   isEditMode = false;
 
   constructor(
     private fb: FormBuilder,
     private menuService: MenuService,
+    private foodService: FoodService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -58,21 +62,28 @@ export class MenuFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.menuId) {
       this.isEditMode = true;
-      const menu = this.menuService.getMenu(this.menuId);
-      if (menu) {
+      
+      // Suscribirse al Observable de getMenu()
+      this.menuService.getMenu(this.menuId).subscribe(menu => {
+        // Una vez que recibimos el objeto 'menu', podemos acceder a sus propiedades
         this.menuForm.patchValue(menu);
-        menu.foods.forEach((food) => this.addFood(food));
-      }
+        menu.foods.forEach((food) => this.addFood(food.id));
+      });
     }
+  
+    // Cargar los alimentos independientemente
+    this.foodService.getFoods().subscribe((foods)=>{
+      this.foodsLoaded = foods;
+    });
   }
 
   get foods() {
     return this.menuForm.get('foods') as FormArray<FormGroup>;
   }
 
-  addFood(food: any = {}): void {
+  addFood(foodId: number | void): void {
     const foodForm = this.fb.group({
-      foodId: ['', Validators.required],
+      food: [Number(foodId) || '', Validators.required], // Guardamos solo el ID o vacío si no se pasa un valor
     });
     this.foods.push(foodForm);
   }
@@ -83,12 +94,23 @@ export class MenuFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.menuForm.valid) {
+      const foodIds = this.menuForm.value.foods.map((food: { food: any }) => Number(food.food)); // Extraemos los IDs seleccionados
+  
+      const menuData = {
+        ...this.menuForm.value,
+        foods: [], // Vacío porque no necesitamos enviar objetos completos
+        foodsIds: foodIds, // Enviamos los IDs de las comidas seleccionadas
+      };
+  
       if (this.isEditMode && this.menuId) {
-        this.menuService.updateMenu({ ...this.menuForm.value, id: this.menuId });
+        this.menuService.updateMenu(this.menuId, menuData).subscribe((menu) => {
+          this.save.emit(menu); // Notifica que el formulario debe cerrarse
+        });
       } else {
-        this.menuService.addMenu(this.menuForm.value);
+        this.menuService.addMenu(menuData).subscribe((menu) => {
+          this.save.emit(menu); // Notifica que el formulario debe cerrarse
+        });
       }
-      this.closeForm.emit(); // Notifica que el formulario debe cerrarse
     }
   }
 
