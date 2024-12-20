@@ -51,7 +51,6 @@ public class JwtAuthenticationFilter implements Filter {
         if (jwtService.validateToken(token)) {
           String dni = jwtService.extractDNI(token);
           if (dni != null) {
-            request.setAttribute("dni", jwtService.extractDNI(token));
             request.setAttribute("dni", dni);
             chain.doFilter(request, response); // Continúa la cadena de filtros
             return;
