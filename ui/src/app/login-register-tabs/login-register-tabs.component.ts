@@ -127,18 +127,17 @@ export class LoginRegisterTabs {
           description: 'Bienvenido de nuevo.',
         })
 
+        this.isLoadingLogin = false
         this.resetForm(this.loginForm)
         this.router.navigate(['/menus'])
       },
       error: (error: CustomError) => {
         console.error('Error en el login:', error)
+        this.isLoadingLogin = false
 
         toast.error('Error en el login', {
           description: error.message,
         })
-      },
-      complete: () => {
-        this.isLoadingLogin = false
       },
     })
   }
