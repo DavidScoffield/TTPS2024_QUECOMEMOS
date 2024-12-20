@@ -68,10 +68,10 @@ export class MenuFormComponent implements OnInit {
       name: ['', Validators.required],
       picture: [''],
       price: ['', [Validators.required, Validators.min(0)]],
-      entrada: ['', Validators.required],
-      platoPrincipal: ['', Validators.required],
-      bebida: ['', Validators.required],
-      postre: ['', Validators.required],
+      entrada: ['0', Validators.required],
+      platoPrincipal: ['0', Validators.required],
+      bebida: ['0', Validators.required],
+      postre: ['0', Validators.required],
     })
   }
 
@@ -83,7 +83,27 @@ export class MenuFormComponent implements OnInit {
       this.menuService.getMenu(this.menuId).subscribe((menu) => {
         // Una vez que recibimos el objeto 'menu', podemos acceder a sus propiedades
         this.menuForm.patchValue(menu)
-        menu.foods.forEach((food) => this.addFood(food.id))
+        const foodsByType = this.groupFoodsByType(menu.foods)
+
+        if (foodsByType['ENTRADA'])
+          this.menuForm
+            .get('entrada')
+            ?.setValue(foodsByType['ENTRADA'][0]?.id || 0)
+        if (foodsByType['PLATO PRINCIPAL'])
+          this.menuForm
+            .get('platoPrincipal')
+            ?.setValue(foodsByType['PLATO PRINCIPAL'][0]?.id || 0)
+
+        if (foodsByType['BEBIDA'])
+          this.menuForm
+            .get('bebida')
+            ?.setValue(foodsByType['BEBIDA'][0]?.id || 0)
+        if (foodsByType['POSTRE'])
+          this.menuForm
+            .get('postre')
+            ?.setValue(foodsByType['POSTRE'][0]?.id || 0)
+
+        // menu.foods.forEach((food) => this.addFood(food.id))
       })
     }
 
@@ -93,7 +113,6 @@ export class MenuFormComponent implements OnInit {
 
       // Actualizar foodsByType agrupando los alimentos por tipo
       this.foodsByType = this.groupFoodsByType(foods)
-      console.log('foodsByType', this.foodsByType)
     })
   }
 
@@ -125,10 +144,6 @@ export class MenuFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.menuForm.valid) {
-      // const foodIds = this.menuForm.value.foods.map((food: { food: any }) =>
-      //   Number(food.food)
-      // ) // Extraemos los IDs seleccionados
-
       const foodIds = [
         this.menuForm.value.entrada,
         this.menuForm.value.platoPrincipal,
@@ -136,7 +151,7 @@ export class MenuFormComponent implements OnInit {
         this.menuForm.value.postre,
       ].filter((food) => Number(food) > 0)
 
-      if (foodIds.length >= 2) {
+      if (foodIds.length < 2) {
         alert('Debes seleccionar al menos 2 comidas')
         return
       }
