@@ -24,8 +24,19 @@
         <!-- Tipo -->
         <label class="block my-4" hlmLabel>
           Tipo
-          <input class="mt-1.5 w-full" id="type" formControlName="type" hlmInput required
-            placeholder="Ingrese el tipo de la comida" />
+          <brn-select class="block mt-1.5" placeholder="Seleccione un tipo" formControlName="type" [multiple]="false">
+            <hlm-select-trigger class="w-56">
+              <hlm-select-value />
+            </hlm-select-trigger>
+            <hlm-select-content>
+              <hlm-option value="ENTRADA">Entrada</hlm-option>
+              <hlm-option value="PLATO PRINCIPAL">Plato principal</hlm-option>
+              <hlm-option value="POSTRE">Postre</hlm-option>
+              <hlm-option value="BEBIDA">Bebida</hlm-option>
+              <hlm-option value="OTRO">Otro</hlm-option>
+            </hlm-select-content>
+          </brn-select>
+
           @if (foodForm.get('type')?.invalid && foodForm.get('type')?.touched) {
           <small>El tipo es obligatorio.</small>
           }

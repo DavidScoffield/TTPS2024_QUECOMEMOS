@@ -26,6 +26,7 @@ import { HlmSelectImports } from '@spartan-ng/ui-select-helm'
 import { FoodService } from '../services/food.service'
 import { HlmCheckboxModule } from '../../../libs/ui/ui-checkbox-helm/src/index'
 import { HlmCheckboxComponent } from '../../../libs/ui/ui-checkbox-helm/src/lib/hlm-checkbox.component'
+import { BrnSelectImports } from '@spartan-ng/ui-select-brain'
 
 @Component({
   selector: 'app-food-form',
@@ -42,8 +43,8 @@ import { HlmCheckboxComponent } from '../../../libs/ui/ui-checkbox-helm/src/lib/
     HlmCardTitleDirective,
     HlmInputDirective,
     HlmLabelDirective,
-    HlmSelectImports,
     HlmCheckboxModule,
+    BrnSelectImports,
     HlmSelectImports,
     HlmCheckboxComponent,
   ],
