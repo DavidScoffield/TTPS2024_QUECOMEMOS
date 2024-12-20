@@ -63,5 +63,8 @@ export class MenuListComponent implements OnInit {
     this.selectedMenuId = undefined;
   }
   
+  isVegetarian(menu: Menu): boolean {
+    return menu.foods.every((f) => f.isVegetarian);
+  }
 
 }

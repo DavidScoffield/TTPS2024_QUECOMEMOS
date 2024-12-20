@@ -13,6 +13,7 @@
             <h4 class="font-bold">{{ menu.name }}</h4>
             <p><strong>Precio:</strong> {{ menu.price }}</p>
             <p><strong>Imagen:</strong> {{ menu.picture }}</p>
+            <p><strong>Vegetariano:</strong> {{ this.isVegetarian(menu)? "SI":"NO" }}</p>
 
             <brn-separator hlmSeparator></brn-separator>
             <h5 class="mt-2">Comidas:</h5>
