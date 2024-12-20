@@ -49,7 +49,7 @@ public class FoodService {
     }
 
     Food newFood = new Food(foodRegisterDTO.getName(), foodRegisterDTO.getIsVegetarian(),
-        foodRegisterDTO.getType());
+        foodRegisterDTO.getType().toString());
 
     foodRepository.save(newFood);
 
@@ -68,8 +68,8 @@ public class FoodService {
     if (!updateFoodDTO.getName().isEmpty()) {
       existingFood.setName(updateFoodDTO.getName());
     }
-    if (!updateFoodDTO.getType().isEmpty()) {
-      existingFood.setType(updateFoodDTO.getType());
+    if (!updateFoodDTO.getType().toString().isEmpty()) {
+      existingFood.setType(updateFoodDTO.getType().toString());
     }
 
     existingFood.setIsVegetarian(updateFoodDTO.getIsVegetarian());

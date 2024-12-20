@@ -1,5 +1,7 @@
 package com.ttps.quecomemos.dto;
 
+import com.ttps.quecomemos.enums.FoodType;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -10,15 +12,15 @@ public class FoodRegisterDTO {
   private String name;
 
   @NotNull
-  private String type;
+  private FoodType type;
 
   @NotNull
   private Boolean isVegetarian;
-  
-  public FoodRegisterDTO(String name, String type, Boolean isVegetarian) {
-	  this.name= name;
-	  this.isVegetarian = isVegetarian;
-	  this.type= type;
+
+  public FoodRegisterDTO(String name, FoodType type, Boolean isVegetarian) {
+    this.name = name;
+    this.isVegetarian = isVegetarian;
+    this.type = type;
   }
 
 }
