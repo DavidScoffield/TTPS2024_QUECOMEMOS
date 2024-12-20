@@ -29,6 +29,10 @@ public class FoodService {
     return foodRepository.findByType(type);
   }
 
+  public Food getFoodById(Long id) {
+    return foodRepository.findById(id).orElse(null);
+  }
+
   public List<Food> findFoodByIsVegetarian() {
     return foodRepository.findByIsVegetarian(true);
   }

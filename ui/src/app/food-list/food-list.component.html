@@ -1,0 +1,32 @@
+<section class="px-4 py-6">
+  <div hlmCardHeader class="flex justify-between items-center">
+    <h1 class="text-xl font-bold" hlmCardTitle>Comidas Disponibles</h1>
+    <button hlmBtn class="mt-2" (click)="openForm()" class="dark">Agregar</button>
+  </div>
+  <hlm-table class="w-full">
+    <hlm-caption>Un listado con las comidas disponibles</hlm-caption>
+    <hlm-trow>
+      <hlm-th class="flex-1">Nombre</hlm-th>
+      <hlm-th class="flex-1 justify-center">Vegetariana</hlm-th>
+      <hlm-th class="flex-1 justify-end">Tipo</hlm-th>
+    </hlm-trow>
+    @for (food of foods; track food.id) {
+    <hlm-trow class="cursor-pointer" (click)="openForm(food.id)">
+      <hlm-td truncate class="font-medium flex-1 ">{{ food.name }}</hlm-td>
+      <hlm-td class="flex-1 justify-center">{{ food.isVegetarian ? 'SI' : "NO" }}</hlm-td>
+      <hlm-td class="flex-1 justify-end">{{ food.type }}</hlm-td>
+    </hlm-trow>
+    }
+    <hlm-trow class="bg-muted/50 hover:bg-muted">
+      <hlm-td truncate class="w-[100px] font-semibold">Total {{foods.length}}</hlm-td>
+    </hlm-trow>
+  </hlm-table>
+</section>
+
+@if (showForm) {
+<div class="modal">
+  <app-food-form [foodId]="selectedFoodId" (save)="saveFood($event)" (closeForm)="closeForm()"></app-food-form>
+</div>
+<!-- Formulario embebido -->
+
+}

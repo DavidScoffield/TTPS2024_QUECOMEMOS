@@ -29,7 +29,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
-
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/foods")
@@ -56,8 +55,8 @@ public class FoodController {
       @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
       @ApiResponse(responseCode = "409", description = "Food already exists", content = @Content),
       @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content) })
-  public ResponseEntity<ApiResponseDTO<Food>> registerFood(@RequestBody
-  FoodRegisterDTO foodRegisterDTO) {
+  public ResponseEntity<ApiResponseDTO<Food>> registerFood(
+      @RequestBody FoodRegisterDTO foodRegisterDTO) {
     log.info("Registering food: {}", foodRegisterDTO);
 
     // Validate data
@@ -94,6 +93,34 @@ public class FoodController {
   }
 
   /**
+   * Retrieves a food by its ID.
+   *
+   * @param id The ID of the food to retrieve.
+   * @return A ResponseEntity containing the food and an HTTP status code.
+   */
+  @GetMapping("/{id}")
+  @Operation(summary = "Get Food by ID", description = "Retrieves a food by its ID")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Food retrieved successfully"),
+      @ApiResponse(responseCode = "404", description = "Food not found", content = @Content),
+      @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content) })
+  public ResponseEntity<ApiResponseDTO<Food>> getFoodById(@PathVariable Long id) {
+    log.info("Fetching food with id: {}", id);
+
+    Food food = foodService.getFoodById(id);
+    if (food == null) {
+      log.error("Food with id {} not found", id);
+      ApiResponseDTO<Food> response = new ApiResponseDTO<>(null, "Food not found",
+          HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    ApiResponseDTO<Food> response = new ApiResponseDTO<>(food,
+        "Food retrieved successfully", HttpStatus.OK);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  /**
    * Updates an existing food.
    * 
    * @param id            The id of the actual food to be updated.
@@ -107,9 +134,8 @@ public class FoodController {
       @ApiResponse(responseCode = "200", description = "Food updated successfully"),
       @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
       @ApiResponse(responseCode = "500", description = "Unexpected error occurred", content = @Content) })
-  public ResponseEntity<ApiResponseDTO<Food>> updateFood(@PathVariable
-  Long id, @RequestBody
-  FoodRegisterDTO updateFoodDTO) {
+  public ResponseEntity<ApiResponseDTO<Food>> updateFood(@PathVariable Long id,
+      @RequestBody FoodRegisterDTO updateFoodDTO) {
     log.info("Updating food: {}", updateFoodDTO, " with id: {}", id);
 
     // Validate data

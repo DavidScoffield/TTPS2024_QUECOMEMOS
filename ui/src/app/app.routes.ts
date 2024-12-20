@@ -3,11 +3,13 @@ import { LoginRegisterTabs } from './login-register-tabs/login-register-tabs.com
 import { MenuFormComponent } from './menu-form/menu-form.component'
 import { MenuListComponent } from './menu-list/menu-list.component'
 import { AuthGuard } from './auth/auth.guard' // Importa el guardia
+import { FoodListComponent } from './food-list/food-list.component'
 
 export const routes: Routes = [
   { path: '', component: LoginRegisterTabs, canActivate: [AuthGuard] }, // Ruta no protegida (login)
   { path: 'menus', component: MenuListComponent, canActivate: [AuthGuard] }, // Ruta protegida
   { path: 'menu/new', component: MenuFormComponent, canActivate: [AuthGuard] }, // Ruta protegida
   { path: 'menu/:id', component: MenuFormComponent, canActivate: [AuthGuard] }, // Ruta protegida
+  { path: 'comidas', component: FoodListComponent, canActivate: [AuthGuard] }, // Ruta protegida
   { path: '**', redirectTo: 'menus' },
 ]

@@ -1,4 +1,4 @@
-<section hlmCard class="w-full dark max-w-2xl mx-auto p-4 h-screen flex flex-col">
+<section hlmCard class="w-full dark max-w-2xl mx-auto p-4 flex flex-col">
   <!-- Encabezado del formulario -->
   <div hlmCardHeader class="flex-shrink-0">
     <h2 hlmCardTitle>{{ isEditMode ? 'Editar' : 'Crear' }} Menú</h2>
@@ -14,52 +14,55 @@
         <!-- Campo de Nombre -->
         <label class="block my-4" hlmLabel>
           Nombre
-          <input class="mt-1.5 w-full" id="name" formControlName="name" hlmInput required placeholder="Ingrese el nombre del menú"/>
+          <input class="mt-1.5 w-full" id="name" formControlName="name" hlmInput required
+            placeholder="Ingrese el nombre del menú" />
           @if (menuForm.get('name')?.invalid && menuForm.get('name')?.touched) {
-            <small>El nombre es obligatorio.</small>
+          <small>El nombre es obligatorio.</small>
           }
         </label>
 
         <!-- Campo de Precio del Menú -->
         <label class="block my-4" hlmLabel>
           Precio
-          <input class="mt-1.5 w-full" id="price" formControlName="price" hlmInput type="number" required placeholder="Ingrese el precio del menú"/>
+          <input class="mt-1.5 w-full" id="price" formControlName="price" hlmInput type="number" required
+            placeholder="Ingrese el precio del menú" min="0" />
           @if (menuForm.get('price')?.invalid && menuForm.get('price')?.touched) {
-            <small>El precio es obligatorio.</small>
+          <small>El precio es obligatorio.</small>
           }
         </label>
 
         <!-- Campo de Imagen -->
         <label class="block my-4" hlmLabel>
           Imagen
-          <textarea class="mt-1.5 w-full" id="picture" formControlName="picture" hlmInput placeholder="Ingrese la imagen"
-          ></textarea>
+          <textarea class="mt-1.5 w-full" id="picture" formControlName="picture" hlmInput
+            placeholder="Ingrese la imagen"></textarea>
         </label>
       </p>
 
       <h3 class="text-lg font-semibold mb-2">Comidas</h3>
       <div class="space-y-4">
         @for (food of foods.controls; track $index) {
-          <div [formGroup]="food" hlmCard class="p-4">
-            <label class="block my-4" hlmLabel>
-              Seleccionar comida
-              <select class="mt-1.5 w-full text-black bg-white dark:text-white dark:bg-gray-800" formControlName="food" hlmInput required>
-                @for (food of foodsLoaded; track food.id) {
-                  <option [value]="food.id">{{food.name}}</option>
-                }
-              </select>
-              @if (food.get('food')?.invalid && food.get('food')?.touched) {
-                <small>
-                  Seleccionar al menos una comida.
-                </small>
+        <div [formGroup]="food" hlmCard class="p-4">
+          <label class="block my-4" hlmLabel>
+            Seleccionar comida
+            <select class="mt-1.5 w-full text-black bg-white dark:text-white dark:bg-gray-800" formControlName="food"
+              hlmInput required>
+              @for (food of foodsLoaded; track food.id) {
+              <option [value]="food.id">{{food.name}}</option>
               }
-            </label>
+            </select>
+            @if (food.get('food')?.invalid && food.get('food')?.touched) {
+            <small>
+              Seleccionar al menos una comida.
+            </small>
+            }
+          </label>
 
-            <!-- Botón para eliminar comida -->
-            <button type="button" hlmBtn variant="destructive" (click)="removeFood($index)">
-              Eliminar Comida
-            </button>
-          </div>
+          <!-- Botón para eliminar comida -->
+          <button type="button" hlmBtn variant="destructive" (click)="removeFood($index)">
+            Eliminar Comida
+          </button>
+        </div>
         }
       </div>
 
@@ -77,5 +80,5 @@
     </form>
   </div>
 
-  
+
 </section>
