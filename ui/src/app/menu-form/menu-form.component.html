@@ -41,35 +41,79 @@
 
       <h3 class="text-lg font-semibold mb-2">Comidas</h3>
       <div class="space-y-4">
-        @for (food of foods.controls; track $index) {
-        <div [formGroup]="food" hlmCard class="p-4">
+
+
+
+        <div hlmCard class="p-4">
           <label class="block my-4" hlmLabel>
-            Seleccionar comida
-            <select class="mt-1.5 w-full text-black bg-white dark:text-white dark:bg-gray-800" formControlName="food"
+            Seleccionar "Entrada"
+            <select class="mt-1.5 w-full text-black bg-white dark:text-white dark:bg-gray-800" formControlName="entrada"
               hlmInput required>
-              @for (food of foodsLoaded; track food.id) {
+              @for (food of foodsByType["ENTRADA"]; track food.id) {
               <option [value]="food.id">{{food.name}}</option>
               }
+              <option value="0">Ninguna</option>
             </select>
-            @if (food.get('food')?.invalid && food.get('food')?.touched) {
+            @if (menuForm.get('entrada')?.invalid && menuForm.get('entrada')?.touched) {
+            <small>
+              Seleccionar al menos una comida.
+            </small>
+            }
+          </label>
+          <label class="block my-4" hlmLabel>
+            Seleccionar "Plato principal"
+            <select class="mt-1.5 w-full text-black bg-white dark:text-white dark:bg-gray-800"
+              formControlName="platoPrincipal" hlmInput required>
+              @for (food of foodsByType["PLATO PRINCIPAL"]; track food.id) {
+              <option [value]="food.id">{{food.name}}</option>
+              }
+              <option value="0">Ninguna</option>
+            </select>
+            @if (menuForm.get('platoPrincipal')?.invalid && menuForm.get('platoPrincipal')?.touched) {
+            <small>
+              Seleccionar al menos una comida.
+            </small>
+            }
+          </label>
+          <label class="block my-4" hlmLabel>
+            Seleccionar "Bebida"
+            <select class="mt-1.5 w-full text-black bg-white dark:text-white dark:bg-gray-800" formControlName="bebida"
+              hlmInput required>
+              @for (food of foodsByType["BEBIDA"]; track food.id) {
+              <option [value]="food.id">{{food.name}}</option>
+              }
+              <option value="0">Ninguna</option>
+            </select>
+            @if (menuForm.get('bebida')?.invalid && menuForm.get('bebida')?.touched) {
+            <small>
+              Seleccionar al menos una comida.
+            </small>
+            }
+          </label>
+          <label class="block my-4" hlmLabel>
+            Seleccionar "Postre"
+            <select class="mt-1.5 w-full text-black bg-white dark:text-white dark:bg-gray-800" formControlName="postre"
+              hlmInput required>
+              @for (food of foodsByType["POSTRE"]; track food.id) {
+              <option [value]="food.id">{{food.name}}</option>
+              }
+              <option value="0">Ninguna</option>
+            </select>
+            @if (menuForm.get('postre')?.invalid && menuForm.get('postre')?.touched) {
             <small>
               Seleccionar al menos una comida.
             </small>
             }
           </label>
 
-          <!-- Botón para eliminar comida -->
-          <button type="button" hlmBtn variant="destructive" (click)="removeFood($index)">
-            Eliminar Comida
-          </button>
         </div>
-        }
+
       </div>
 
       <!-- Botón para agregar comida -->
-      <div class="mt-4">
+      <!--  <div class="mt-4">
         <button type="button" hlmBtn variant="outline" (click)="addFood()">Agregar Comida</button>
-      </div>
+      </div> -->
       <!-- Botones de pie de página -->
       <div hlmCardFooter class="flex-shrink-0 flex justify-between mt-4">
         <button type="button" hlmBtn variant="secondary" (click)="onCancel()">Cancelar</button>
